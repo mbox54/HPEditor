@@ -1,8 +1,15 @@
-#include <windows.h>
-#include "resource.h"
+// main.cpp
+// HP Editor application file
 
-WNDPROC oldEditProc = NULL;
+////////////////////////////////////////////////////////////////////////////////
+// include
+////////////////////////////////////////////////////////////////////////////////
+#include "project.h"
 
+
+////////////////////////////////////////////////////////////////////////////////
+// function
+////////////////////////////////////////////////////////////////////////////////
 LRESULT CALLBACK newEditProc(HWND hEdit, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -35,9 +42,9 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-		oldEditProc = (WNDPROC)SetWindowLong(
-			GetDlgItem(hDlg, IDC_EDIT1),
-			GWL_WNDPROC, (LONG)newEditProc);
+		oldEditProc = (WNDPROC)SetWindowLongPtr(
+			GetDlgItem(hDlg, IDC_EDIT_CMD),
+			GWLP_WNDPROC, (LONG)newEditProc);
 		break;
 
 
@@ -65,7 +72,7 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_KEYDOWN:
 		if (VK_RETURN == wParam)
-			GetDlgItemText(hDlg, IDC_EDIT1, (LPWSTR) m_edText, 256);
+			GetDlgItemText(hDlg, IDC_EDIT_CMD, (LPWSTR) m_edText, 256);
 		break;
 
 	}
@@ -73,11 +80,20 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-int APIENTRY WinMain(HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR     lpCmdLine,
-	int       nCmdShow)
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR    lpCmdLine,
+	_In_ int       nCmdShow)
 {
-	DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), HWND_DESKTOP, (DLGPROC)DlgProc);
+	// init
+	oldEditProc = NULL;
+	
+	// save main dialog handle
+	g_hInst = hInstance;
+
+	// show main dialog, start message proc
+	DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG_MAIN), HWND_DESKTOP, (DLGPROC)DlgProc);
+	
 	return 0;
 }

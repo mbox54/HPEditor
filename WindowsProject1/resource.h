@@ -11,10 +11,14 @@
 #define IDI_WINDOWSPROJECT1             107
 #define IDI_SMALL                       108
 #define IDC_WINDOWSPROJECT1             109
+#define IDC_MENU                        109
 #define IDR_MAINFRAME                   128
 #define IDD_DIALOG1                     129
+#define IDD_DIALOG_MAIN                 129
 #define IDC_EDIT1                       1000
+#define IDC_EDIT_CMD                    1000
 #define IDC_EDIT2                       1001
+#define IDC_EDIT_LOG                    1001
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
