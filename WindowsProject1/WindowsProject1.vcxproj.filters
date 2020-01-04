@@ -21,6 +21,9 @@
     <ClInclude Include="project.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pkdialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WindowsProject1.rc">
@@ -37,6 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pkdialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
