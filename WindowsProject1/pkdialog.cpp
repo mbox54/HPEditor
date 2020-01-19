@@ -9,12 +9,57 @@
 #include "project.h"
 #include "pkdialog.h"
 
-
+WNDPROC		m_hPreviousProcHandle;
 ////////////////////////////////////////////////////////////
 // *** support classes ***
 ////////////////////////////////////////////////////////////
-// Edit-'COMMAND'
+// > Common control prototype
+////////////////////////////////////////////////////////////
+// Construction/Destruction
+////////////////////////////////////////////////////////////
+// static section
+long PKControl::m_lThis = 0;
 
+PKControl::PKControl()
+{
+	m_hPreviousProcHandle = NULL;
+
+	// store handler to this
+	PKControl::m_lThis = (long)this;
+}
+
+
+PKControl::~PKControl()
+{
+	PKControl::m_lThis = 0;
+}
+
+
+LRESULT PKControl::ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	// NOTE:
+	// call proc as class method
+	PKControl* pThis = (PKControl*)PKControl::m_lThis;
+
+	return (pThis->Proc(hWnd, msg, wParam, lParam));
+}
+
+
+LRESULT PKControl::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+
+	default:
+
+		break;
+	}
+
+	return CallWindowProc(*m_hPreviousProcHandle, hWnd, msg, wParam, lParam);
+}
+
+
+// > Edit-'COMMAND'
 ////////////////////////////////////////////////////////////
 // Construction/Destruction
 ////////////////////////////////////////////////////////////
@@ -99,6 +144,10 @@ void Edit_cmd::Init(int nResId, HWND hWndParent, WNDPROC* hMainDlgProcHandle)
 }
 
 
+// Canvas control
+
+
+
 ////////////////////////////////////////////////////////////
 // Construction/Destruction
 ////////////////////////////////////////////////////////////
@@ -149,6 +198,40 @@ BOOL CALLBACK PKDialog::DlgProcStatic(HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 }
 
 
+// static procedure must be called after Object is constructed!
+// (so DlgProc must existed)
+BOOL CALLBACK CanvasProcStatic(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{	
+//	static char m_edText[256] = "";
+
+	switch (msg)
+	{
+
+		//case WM_KEYDOWN:
+		//	if (VK_RETURN == wParam)
+		//		GetDlgItemText(hDlg, IDC_EDIT_CMD, (LPWSTR)m_edText, 256);
+		//	break;
+
+
+	case WM_PAINT:
+
+		// test
+		DrawPixels(hDlg);
+
+		break;
+
+	}
+
+
+	return CallWindowProc(m_hPreviousProcHandle, hDlg, msg, wParam, lParam);
+
+
+	/*PKDialog* pThis = (PKDialog*)PKDialog::m_lThis;
+
+	return (pThis->DlgProc(hDlg, msg, wParam, lParam));*/
+}
+
+
 ////////////////////////////////////////////////////////////
 // class methods
 ////////////////////////////////////////////////////////////
@@ -162,7 +245,41 @@ void PKDialog::Init(HWND hDlg)
 	// Edit-'COMMAND'
 	m_Edit_cmd.Init(IDC_EDIT_CMD, hDlg, &m_hMainDlgProcHandle);
 
+	// Picture-'Canvas'
+	HWND m_hCanvas = GetDlgItem(hDlg, IDC_STATIC_CANVAS);
+
+	m_hPreviousProcHandle = (WNDPROC)SetWindowLongPtr(
+		m_hCanvas,
+		GWLP_WNDPROC,
+		(LONG)CanvasProcStatic);
+	
 }
+
+
+void DrawPixels(HWND hwnd) 
+{
+	PAINTSTRUCT ps;
+	RECT r;
+
+	GetClientRect(hwnd, &r);
+
+	if (r.bottom == 0) {
+
+		return;
+	}
+
+	HDC hdc = BeginPaint(hwnd, &ps);
+
+	for (int i = 0; i < 1000; i++) {
+
+		int x = rand() % r.right;
+		int y = rand() % r.bottom;
+		SetPixel(hdc, x, y, RGB(255, 0, 0));
+	}
+
+	EndPaint(hwnd, &ps);
+}
+
 
 // main dialog message routine
 BOOL PKDialog::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -205,7 +322,16 @@ BOOL PKDialog::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 		//		GetDlgItemText(hDlg, IDC_EDIT_CMD, (LPWSTR)m_edText, 256);
 		//	break;
 
+
+	case WM_PAINT:
+
+		// test
+		DrawPixels(hDlg);
+
+		break;
+
 	}
+
 
 	return 0;
 }
@@ -219,4 +345,26 @@ void PKDialog::DoModal(void)
 {
 	// show main dialog, start message proc
 	DialogBox(m_hInstance, MAKEINTRESOURCE(m_nResId), HWND_DESKTOP, (DLGPROC)PKDialog::DlgProcStatic);
+}
+
+Canvas::Canvas()
+{
+
+}
+
+Canvas::~Canvas()
+{
+
+}
+
+void Canvas::Init(int nResId, HWND hWndParent, WNDPROC* hMainDlgProcHandle)
+{
+
+}
+
+LRESULT Canvas::CanvasProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	
+
+	return LRESULT();
 }
