@@ -34,13 +34,11 @@ protected:
 	WNDPROC* m_hPreviousProcHandle = 0;
 
 	// > methods
-	// message loop routine callback static prototype
-	static LRESULT CALLBACK ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 	// control message loop routine
-	LRESULT Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT virtual Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// this handle, need for place CALLBACK proc as dialog method
+	// virtual, need to regefine in derived classes
 	static long m_lThis;
 };
 
@@ -94,25 +92,18 @@ public:
 	~Canvas();
 
 	// service
-	void Init(int nResId, HWND hWndParent, WNDPROC* hMainDlgProcHandle);
+	void Init(int nResId, HWND hWndParent, WNDPROC* hProcHandle);
 
 
 	// > properties
-	// store dialog properties relate to control
-	int m_nResId2 = 0;
-	HWND m_hWndParent = NULL;
-
 
 	// > methods
-	// wndproc handle to parent for subclassing implementation
-	WNDPROC* m_hPreviousProcHandle = 0;
-
 	//
 	// message loop routine callback static prototype
-	static LRESULT CALLBACK CanvasProcStatic(HWND hEdit, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// control message loop routine
-	LRESULT CanvasProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// this handle, need for place CALLBACK proc as dialog method
 	static long m_lThis;
@@ -137,6 +128,8 @@ public:
 
 	// > controls
 	Edit_cmd m_Edit_cmd;
+	Canvas m_Canvas;
+
 
 private:
 	// service
@@ -144,8 +137,14 @@ private:
 	WORD		m_nResId;
 	HWND		m_hWndParent;
 
-	// Edit control needs self KeyDown event
-	WNDPROC		m_hMainDlgProcHandle;
+	// Need to be global
+	// Edit control subclass wnd proc: needs self KeyDown event
+	WNDPROC		m_hEditCmd_ProcHandle;
+
+	// Canvas control subclass wnd proc: need paint self event
+	WNDPROC		m_hCanvas_ProcHandle;
+
+	// ?
 	WNDPROC		m_hProcHandle;
 
 	// message loop routine callback static prototype

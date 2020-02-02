@@ -34,28 +34,10 @@ PKControl::~PKControl()
 	PKControl::m_lThis = 0;
 }
 
-
-LRESULT PKControl::ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	// NOTE:
-	// call proc as class method
-	PKControl* pThis = (PKControl*)PKControl::m_lThis;
-
-	return (pThis->Proc(hWnd, msg, wParam, lParam));
-}
-
-
+// virtual
 LRESULT PKControl::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (msg)
-	{
-
-	default:
-
-		break;
-	}
-
-	return CallWindowProc(*m_hPreviousProcHandle, hWnd, msg, wParam, lParam);
+	return 0;
 }
 
 
@@ -134,7 +116,7 @@ void Edit_cmd::Init(int nResId, HWND hWndParent, WNDPROC* hMainDlgProcHandle)
 	m_hMainDlgProcHandle = hMainDlgProcHandle;
 
 	// replace main message proc to edit-'COMMAND' control
-	// save main dlg proc handle to use it for next call in proc sequence
+	// save proc handle to use it for next call in proc sequence
 	HWND m_hEdit = GetDlgItem(m_hWndParent, m_nResId);
 
 	*m_hMainDlgProcHandle = (WNDPROC)SetWindowLongPtr(
@@ -145,8 +127,74 @@ void Edit_cmd::Init(int nResId, HWND hWndParent, WNDPROC* hMainDlgProcHandle)
 
 
 // Canvas control
+// static section
+long Canvas::m_lThis = 0;
+
+Canvas::Canvas()
+{
+	// store handler to this
+	Canvas::m_lThis = (long)this;
+}
 
 
+Canvas::~Canvas()
+{
+	// pointed to null
+	Canvas::m_lThis = NULL;
+}
+
+
+void Canvas::Init(int nResId, HWND hWndParent, WNDPROC* hProcHandle)
+{
+	// copy properties to item
+	m_nResId = nResId;
+	m_hWndParent = hWndParent;
+	m_hPreviousProcHandle = hProcHandle;
+
+	// replace message proc to edit-'COMMAND' control
+	// save main dlg proc handle to use it for next call in proc sequence
+	HWND m_hCanvas = GetDlgItem(m_hWndParent, m_nResId);
+
+	*m_hPreviousProcHandle = (WNDPROC)SetWindowLongPtr(
+		m_hCanvas,
+		GWLP_WNDPROC,
+		(LONG)ProcStatic);
+}
+
+// enter event proc
+LRESULT Canvas::ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	Canvas* pThis = (Canvas*)Canvas::m_lThis;
+
+	return (pThis->Proc(hWnd, msg, wParam, lParam));
+}
+
+
+LRESULT Canvas::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+
+		//case WM_KEYDOWN:
+		//	if (VK_RETURN == wParam)
+		//		GetDlgItemText(hDlg, IDC_EDIT_CMD, (LPWSTR)m_edText, 256);
+		//	break;
+
+
+	case WM_PAINT:
+
+		// test
+		DrawPixels(hWnd);
+
+		break;
+
+	}
+
+	// call parent events proc
+	return CallWindowProc(*m_hPreviousProcHandle, hWnd, msg, wParam, lParam);
+}
+
+// Main Dialog section
 
 ////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -165,7 +213,9 @@ PKDialog::PKDialog(HINSTANCE hInstance, int nResId, HWND hWndParent) :
 	PKDialog::m_lThis = (long)this;
 
 	// handle variable, init NULL here
-	m_hMainDlgProcHandle = NULL;
+	m_hEditCmd_ProcHandle = NULL;
+	m_hCanvas_ProcHandle = NULL;
+
 	m_hProcHandle = NULL;
 }
 
@@ -243,16 +293,10 @@ void PKDialog::Init(HWND hDlg)
 
 	// > Controls
 	// Edit-'COMMAND'
-	m_Edit_cmd.Init(IDC_EDIT_CMD, hDlg, &m_hMainDlgProcHandle);
+	m_Edit_cmd.Init(IDC_EDIT_CMD, hDlg, &m_hEditCmd_ProcHandle);
 
 	// Picture-'Canvas'
-	HWND m_hCanvas = GetDlgItem(hDlg, IDC_STATIC_CANVAS);
-
-	m_hPreviousProcHandle = (WNDPROC)SetWindowLongPtr(
-		m_hCanvas,
-		GWLP_WNDPROC,
-		(LONG)CanvasProcStatic);
-	
+	m_Canvas.Init(IDC_STATIC_CANVAS, hDlg, &m_hCanvas_ProcHandle);
 }
 
 
@@ -326,7 +370,7 @@ BOOL PKDialog::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 
 		// test
-		DrawPixels(hDlg);
+		//DrawPixels(hDlg);
 
 		break;
 
@@ -347,24 +391,3 @@ void PKDialog::DoModal(void)
 	DialogBox(m_hInstance, MAKEINTRESOURCE(m_nResId), HWND_DESKTOP, (DLGPROC)PKDialog::DlgProcStatic);
 }
 
-Canvas::Canvas()
-{
-
-}
-
-Canvas::~Canvas()
-{
-
-}
-
-void Canvas::Init(int nResId, HWND hWndParent, WNDPROC* hMainDlgProcHandle)
-{
-
-}
-
-LRESULT Canvas::CanvasProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	
-
-	return LRESULT();
-}
