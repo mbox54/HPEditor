@@ -29,6 +29,7 @@ protected:
 	// store control properties relate to control
 	int m_nResId = 0;
 	HWND m_hWndParent = NULL;
+	HWND m_hWnd = NULL;
 
 	// wndproc handle to parent for subclassing implementation
 	WNDPROC* m_hPreviousProcHandle = 0;
@@ -45,7 +46,7 @@ protected:
 
 
 // Edit-'COMMAND'
-class Edit_cmd
+class Edit_cmd: public PKControl 
 {
 public:
 	// constructor
@@ -58,24 +59,15 @@ public:
 
 
 	// > properties
-	// store dialog properties relate to control
-	int m_nResId = 0;
-	HWND m_hWndParent = NULL;
+
 
 	// > methods
-
-
-private:
-
-	// wndproc handle to parent for subclassing implementation
-	WNDPROC* m_hMainDlgProcHandle = 0; 
-
 	//
 	// message loop routine callback static prototype
-	static LRESULT CALLBACK EditProcStatic(HWND hEdit, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// control message loop routine
-	LRESULT EditProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// this handle, need for place CALLBACK proc as dialog method
 	static long m_lThis;
@@ -103,10 +95,22 @@ public:
 	static LRESULT CALLBACK ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// control message loop routine
-	LRESULT Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	
 
 	// this handle, need for place CALLBACK proc as dialog method
 	static long m_lThis;
+
+private:
+
+	// properties
+	RECT m_canvasRect;
+
+	// methods
+	void InitCanvas();
+	
+	void OnPaint();
+
+
 };
 
 

@@ -155,10 +155,12 @@
     <ClInclude Include="pkdialog.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="project.h" />
+    <ClInclude Include="WastGDIDraw.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pkdialog.cpp" />
+    <ClCompile Include="WastGDIDraw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WindowsProject1.rc" />

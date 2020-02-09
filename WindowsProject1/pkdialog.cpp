@@ -50,7 +50,7 @@ long Edit_cmd::m_lThis = 0;
 
 Edit_cmd::Edit_cmd()
 {
-	m_hMainDlgProcHandle = NULL;
+	m_hPreviousProcHandle = NULL;
 
 	// store handler to this
 	Edit_cmd::m_lThis = (long)this;
@@ -70,18 +70,18 @@ Edit_cmd::~Edit_cmd()
 
 // NOTE:
 // static procedure must be called after Object is constructed!
-LRESULT CALLBACK Edit_cmd::EditProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Edit_cmd::ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// NOTE:
 	// call proc as class method
 	Edit_cmd* pThis = (Edit_cmd*)Edit_cmd::m_lThis;
 
-	return (pThis->EditProc(hWnd, msg, wParam, lParam));
+	return (pThis->Proc(hWnd, msg, wParam, lParam));
 }
 
 
 // edit-'COMMAND' control message routine
-LRESULT Edit_cmd::EditProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT Edit_cmd::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
@@ -104,7 +104,7 @@ LRESULT Edit_cmd::EditProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	return CallWindowProc(*m_hMainDlgProcHandle, hWnd, msg, wParam, lParam);
+	return CallWindowProc(*m_hPreviousProcHandle, hWnd, msg, wParam, lParam);
 }
 
 
@@ -113,16 +113,16 @@ void Edit_cmd::Init(int nResId, HWND hWndParent, WNDPROC* hMainDlgProcHandle)
 	// copy properties to item
 	m_nResId = nResId;
 	m_hWndParent = hWndParent;
-	m_hMainDlgProcHandle = hMainDlgProcHandle;
+	m_hPreviousProcHandle = hMainDlgProcHandle;
 
 	// replace main message proc to edit-'COMMAND' control
 	// save proc handle to use it for next call in proc sequence
 	HWND m_hEdit = GetDlgItem(m_hWndParent, m_nResId);
 
-	*m_hMainDlgProcHandle = (WNDPROC)SetWindowLongPtr(
+	*m_hPreviousProcHandle = (WNDPROC)SetWindowLongPtr(
 		m_hEdit,
 		GWLP_WNDPROC,
-		(LONG)EditProcStatic);
+		(LONG)ProcStatic);
 }
 
 
@@ -172,6 +172,16 @@ LRESULT Canvas::ProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT Canvas::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	// set hWnd
+	if (m_hWnd == NULL)
+	{
+		m_hWnd = hWnd;
+
+		// get wnd parameters
+		InitCanvas();
+	}
+	
+	// msg proc
 	switch (msg)
 	{
 
@@ -182,9 +192,7 @@ LRESULT Canvas::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 	case WM_PAINT:
-
-		// test
-		DrawPixels(hWnd);
+		OnPaint();
 
 		break;
 
@@ -192,6 +200,19 @@ LRESULT Canvas::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	// call parent events proc
 	return CallWindowProc(*m_hPreviousProcHandle, hWnd, msg, wParam, lParam);
+}
+
+void Canvas::InitCanvas()
+{
+	// rect coords
+	GetClientRect(m_hWnd, &m_canvasRect);
+}
+
+
+void Canvas::OnPaint()
+{
+	// test
+	DrawPixels(m_hWnd);
 }
 
 // Main Dialog section
