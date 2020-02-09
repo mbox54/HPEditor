@@ -202,17 +202,18 @@ LRESULT Canvas::Proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return CallWindowProc(*m_hPreviousProcHandle, hWnd, msg, wParam, lParam);
 }
 
+
 void Canvas::InitCanvas()
 {
-	// rect coords
-	GetClientRect(m_hWnd, &m_canvasRect);
+	// init Canvas object
+	m_Draw.Init(m_hWnd);
 }
 
 
 void Canvas::OnPaint()
 {
 	// test
-	DrawPixels(m_hWnd);
+	m_Draw.DrawPixels();
 }
 
 // Main Dialog section
@@ -269,40 +270,6 @@ BOOL CALLBACK PKDialog::DlgProcStatic(HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 }
 
 
-// static procedure must be called after Object is constructed!
-// (so DlgProc must existed)
-BOOL CALLBACK CanvasProcStatic(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
-{	
-//	static char m_edText[256] = "";
-
-	switch (msg)
-	{
-
-		//case WM_KEYDOWN:
-		//	if (VK_RETURN == wParam)
-		//		GetDlgItemText(hDlg, IDC_EDIT_CMD, (LPWSTR)m_edText, 256);
-		//	break;
-
-
-	case WM_PAINT:
-
-		// test
-		DrawPixels(hDlg);
-
-		break;
-
-	}
-
-
-	return CallWindowProc(m_hPreviousProcHandle, hDlg, msg, wParam, lParam);
-
-
-	/*PKDialog* pThis = (PKDialog*)PKDialog::m_lThis;
-
-	return (pThis->DlgProc(hDlg, msg, wParam, lParam));*/
-}
-
-
 ////////////////////////////////////////////////////////////
 // class methods
 ////////////////////////////////////////////////////////////
@@ -320,30 +287,6 @@ void PKDialog::Init(HWND hDlg)
 	m_Canvas.Init(IDC_STATIC_CANVAS, hDlg, &m_hCanvas_ProcHandle);
 }
 
-
-void DrawPixels(HWND hwnd) 
-{
-	PAINTSTRUCT ps;
-	RECT r;
-
-	GetClientRect(hwnd, &r);
-
-	if (r.bottom == 0) {
-
-		return;
-	}
-
-	HDC hdc = BeginPaint(hwnd, &ps);
-
-	for (int i = 0; i < 1000; i++) {
-
-		int x = rand() % r.right;
-		int y = rand() % r.bottom;
-		SetPixel(hdc, x, y, RGB(255, 0, 0));
-	}
-
-	EndPaint(hwnd, &ps);
-}
 
 
 // main dialog message routine

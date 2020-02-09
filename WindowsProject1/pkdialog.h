@@ -9,9 +9,8 @@
 // include
 ////////////////////////////////////////////////////////////
 #include "project.h"
+#include "WastGDIDraw.h"
 
-BOOL CALLBACK CanvasProcStatic(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-void DrawPixels(HWND hwnd);
 
 ////////////////////////////////////////////////////////////
 // support classes
@@ -103,13 +102,12 @@ public:
 private:
 
 	// properties
-	RECT m_canvasRect;
+	WastGDIDraw m_Draw;
 
 	// methods
 	void InitCanvas();
 	
 	void OnPaint();
-
 
 };
 
