@@ -1,5 +1,13 @@
 // WastGDIDraw.c
 // implementation file
+//
+// *** plans TODO: ***
+// 09.02.20
+// - [09.02.20] draw Grid (main level0 grid)
+// - [09.02.20] load Grid from file.xml
+// - [09.02.20] find a concept to separate graphic engine from Wast-project core logic
+// - [09.02.20] save Grid to file.xml
+
 
 #include "WastGDIDraw.h"
 
