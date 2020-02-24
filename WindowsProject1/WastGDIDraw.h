@@ -24,6 +24,7 @@ public:
 	// constructor
 	WastGDIDraw();
 	WastGDIDraw(HWND hWnd);
+	//HGrid(CStaticHP* p_CanvasHP);
 
 	~WastGDIDraw();
 
@@ -31,6 +32,9 @@ public:
 
 	// methods
 	void Init(HWND hWnd);
+
+	//void SetCanvas(CStaticHP* p_CanvasHP);
+	//void SetGridGraphInfo();
 
 	// test
 	void DrawPixels();
@@ -44,7 +48,12 @@ private:
 	// canvas window parameters
 	RECT m_canvasRect;
 
-
+	//// > > Graphics
+	//// Canvas sourse
+	//CStaticHP* p_CanvasHP;
+	
+	//// localize Variable usage
+	//vectGraphGridInfo* p_GridGraphInfo;	// pointer to /set of Nodes Info/ from Canvas
 
 	// methods
 };

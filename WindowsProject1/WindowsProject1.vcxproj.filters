@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="HPCore">
+      <UniqueIdentifier>{d150994b-4352-48a7-9f73-cc2bec9a7b99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -26,6 +29,21 @@
     </ClInclude>
     <ClInclude Include="WastGDIDraw.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HPCore\hgrid.h">
+      <Filter>HPCore</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\hnode.h">
+      <Filter>HPCore</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\hplot.h">
+      <Filter>HPCore</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\globals.h">
+      <Filter>HPCore</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\hhexlogic.h">
+      <Filter>HPCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +68,21 @@
     </ClCompile>
     <ClCompile Include="WastGDIDraw.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HPCore\hgrid.cpp">
+      <Filter>HPCore</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\hnode.cpp">
+      <Filter>HPCore</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\hplot.cpp">
+      <Filter>HPCore</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\globals.cpp">
+      <Filter>HPCore</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\hhexlogic.cpp">
+      <Filter>HPCore</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
