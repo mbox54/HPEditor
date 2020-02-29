@@ -81,13 +81,6 @@ void Hhexlogic<T>::PlaceGridNull(void)
 		// Fill Cols
 		for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
 		{
-			// define Coord to set
-			CoordGrid.y = uiCoorY;
-			CoordGrid.x = uiCoorX;
-
-			// create Node instance
-			CNodeHP NodeHP(CoordGrid);
-
 			// allocate memory: Node in 2x Cell /in Node Vector container
 			this->mv_grid[uiCoorY].push_back( T );
 		}//for (WORD uiCoorX
@@ -114,10 +107,10 @@ void Hhexlogic<T>::PlaceGridFill(void)
 			CoordGrid.x = uiCoorX;
 
 			// create Node instance
-			CNodeHP NodeHP(CoordGrid);
+			T T_inst(CoordGrid);
 
 			// allocate memory: Node in 2x Cell /in Node Vector container
-			this->mv_grid[uiCoorY].push_back(T);
+			this->mv_grid[uiCoorY].push_back(T_inst);
 
 			// Load Node Values
 			this->LoadNode(CoordGrid);

@@ -21,7 +21,7 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
-#include "stdafx.h"
+#include "../project.h"
 #include "tinyxml2.h"
 
 #include <new>		// yes, this one new style header, is in the Android SDK.

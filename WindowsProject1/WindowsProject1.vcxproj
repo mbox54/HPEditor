@@ -152,22 +152,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="external\tinyxml2.h" />
     <ClInclude Include="hpcore\globals.h" />
     <ClInclude Include="HPCore\hgrid.h" />
     <ClInclude Include="hpcore\hhexlogic.h" />
     <ClInclude Include="hpcore\hnode.h" />
     <ClInclude Include="hpcore\hplot.h" />
+    <ClInclude Include="hpcore\hsector.h" />
+    <ClInclude Include="hpcore\htypedefs.h" />
+    <ClInclude Include="hpcore\schatze.h" />
+    <ClInclude Include="hpcore\terrain.h" />
+    <ClInclude Include="hpcore\trasse.h" />
+    <ClInclude Include="hpcore\weg.h" />
     <ClInclude Include="pkdialog.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="project.h" />
     <ClInclude Include="WastGDIDraw.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="external\tinyxml2.cpp" />
     <ClCompile Include="hpcore\globals.cpp" />
     <ClCompile Include="HPCore\hgrid.cpp" />
     <ClCompile Include="hpcore\hhexlogic.cpp" />
     <ClCompile Include="hpcore\hnode.cpp" />
     <ClCompile Include="hpcore\hplot.cpp" />
+    <ClCompile Include="hpcore\hsector.cpp" />
+    <ClCompile Include="hpcore\schatze.cpp" />
+    <ClCompile Include="hpcore\terrain.cpp" />
+    <ClCompile Include="hpcore\trasse.cpp" />
+    <ClCompile Include="hpcore\weg.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pkdialog.cpp" />
     <ClCompile Include="WastGDIDraw.cpp" />

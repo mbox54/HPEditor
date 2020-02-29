@@ -5,7 +5,7 @@
 // Class for Hex_Plot Grid representation
 // define Grid common logic
 // Grid include Nodes
-// HGrid <- HPlot <- CNodeHP <- CSector
+// HGrid <- HPlot <- CNodeHP <- HSector
 // ***********************************************************************
 
 // interface file
@@ -20,9 +20,12 @@
 // Routing
 #include "trasse.h"						
 
+// load/save xml file
+#include "../external/tinyxml2.h"
+
 //#include "external\tinyxml2.h"			// File OPs
 #include <vector>							// Sys: Support
-//
+
 
 //////////////////////////////////////////////////////////////////////
 // Definitions
@@ -40,7 +43,9 @@ extern char strWastName[32];
 // =======================================================================
 // class HGrid
 // =======================================================================
-class HGrid
+// template <typename T>
+// class HGrid : public Hhexlogic<HPlot>
+class HGrid 
 {
 public:
 	// standard constructor
@@ -66,7 +71,7 @@ public:
 
 	// > > Logic
 	// Node OP
-	void AddNode();
+	//void AddNode();
 	void LoadNode(POINT gridPos);
 
 	void AddWeg();
@@ -75,8 +80,8 @@ public:
 
 	// > > Graphic
 	// Native
-	void FormGraphInfo();
-	void PaintGrid();
+	//void FormGraphInfo();
+	//void PaintGrid();
 
 	// File OPs
 	void Save();

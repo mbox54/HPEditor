@@ -9,6 +9,8 @@
 
 // implementation file
 
+#define _CRT_SECURE_NO_WARNINGS
+
 
 //////////////////////////////////////////////////////////////////////
 // Includes
@@ -70,13 +72,13 @@ HGrid::HGrid()
 // use VS Win Static control as canvas for graphics
 // NOTE:
 // this realisation attach Canvas upon OnInit stage!
-HGrid::HGrid(CStaticHP * p_CanvasHP)
-	: p_CanvasHP(p_CanvasHP)
-{
-	// Init
-	Init();
-
-}
+//HGrid::HGrid(CStaticHP * p_CanvasHP)
+//	: p_CanvasHP(p_CanvasHP)
+//{
+//	// Init
+//	Init();
+//
+//}
 
 
 HGrid::~HGrid()
@@ -128,7 +130,7 @@ void HGrid::PlaceNet()
 	for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
 	{
 		// allocate memory: Vector for Row /in Node Vector container
-		this->v_Nodes.push_back(std::vector<CNodeHP>());
+		this->mv_grid.push_back(std::vector<HPlot>());
 
 		// Fill Cols
 		for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
@@ -138,10 +140,10 @@ void HGrid::PlaceNet()
 			CoordGrid.x = uiCoorX;
 			
 			// create Node instance
-			CNodeHP NodeHP(CoordGrid);
+			HNode NodeHP(CoordGrid);
 
 			// allocate memory: Node in 2x Cell /in Node Vector container
-			this->v_Nodes[uiCoorY].push_back(NodeHP);
+			this->mv_grid[uiCoorY].push_back(HPlot());
 
 			// Load Node Values
 			this->LoadNode(CoordGrid);
@@ -154,15 +156,15 @@ void HGrid::PlaceNet()
 //////////////////////////////////////////////////////////////////////
 // Common methods section
 //
-void HGrid::AddNode()
-{
-	CNodeHP NodeHP;
-}
-
+//void HGrid::AddNode()
+//{
+//	HNode Node1;
+//}
+//
 // Load Grid: Size, v_Nodes From File/Base
 void HGrid::LoadNode(POINT gridPos)
 {
-	this->v_Nodes[gridPos.y][gridPos.x].Load();
+	this->mv_grid[gridPos.y][gridPos.x].Load();
 
 	// set Node
 	//v_Nodes
@@ -363,8 +365,8 @@ void HGrid::Save()
 	tinyxml2::XMLDocument WDocument;
 
 	// # Form XML Header
-	char * str_XMLSpec = "xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
-	tinyxml2::XMLDeclaration* WDeclaration = WDocument.NewDeclaration(str_XMLSpec);
+	char * str_XMLSpec = (char*)"xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
+	tinyxml2::XMLDeclaration* WDeclaration = WDocument.NewDeclaration((char const*)str_XMLSpec);
 	WDocument.LinkEndChild(WDeclaration);
 
 	tinyxml2::XMLComment* CmntDeclaration = WDocument.NewComment("WAST Grid file structure");
@@ -438,8 +440,8 @@ void HGrid::Save()
 	strcat(strFileName, m_strWastName);
 
 	// Create Node directory
-	CreateDirectory((CString)strFileName, NULL);
-
+	CreateDirectory((LPCWSTR)strFileName, NULL);
+	
 	strcat(strFileName, "\\Grid.xml");
 
 	WDocument.SaveFile(strFileName);

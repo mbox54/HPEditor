@@ -4,7 +4,7 @@
 // *******************************************************************
 // Class for Hex_Plot Sector representation
 // define Coord point in Node
-// CGridHP <- CPlotHP <- CNodeHP <- CSector
+// CGridHP <- CPlotHP <- CNodeHP <- HSector
 // *******************************************************************
 
 
@@ -20,18 +20,18 @@
 #include "globals.h"
 
 // load/save xml file
-#include "external\tinyxml2.h"
+#include "../external/tinyxml2.h"
+
 
 //////////////////////////////////////////////////////////////////////
-// ===================================================================
-// class CSector
-// ===================================================================
-class CSector
+// class HSector
+//////////////////////////////////////////////////////////////////////
+class HSector
 {
 public:
 	// standard constructor
-	CSector();
-	CSector(POINT pt_GridPos, POINT pt_NodePos);
+	HSector();
+	HSector(POINT pt_GridPos, POINT pt_NodePos);
 
 
 	// +++++++++++++++++++
@@ -67,7 +67,7 @@ public:
 	//....................................................................
 
 
-	~CSector();
+	~HSector();
 
 };
 

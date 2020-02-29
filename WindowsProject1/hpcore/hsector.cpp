@@ -4,33 +4,35 @@
 // *******************************************************************
 // Class for Hex_Plot Sector representation
 // define Coord point in Node
-// CGridHP <- CPlotHP <- CNodeHP <- CSector
+// CGridHP <- CPlotHP <- CNodeHP <- HSector
 // *******************************************************************
 
 // implementation file
+
+#define _CRT_SECURE_NO_WARNINGS
 
 
 //////////////////////////////////////////////////////////////////////
 // Includes
 //////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-#include "Sector.h"
+#include "../project.h"
+#include "hsector.h"
 
 
 // ===================================================================
-// class CSector
+// class HSector
 // ===================================================================
 //////////////////////////////////////////////////////////////////////
 // Constructor, init section
 //
-CSector::CSector()
+HSector::HSector()
 {
 	Init();
 
 }
 
-CSector::CSector(POINT pt_GridPos, POINT pt_NodePos)
+HSector::HSector(POINT pt_GridPos, POINT pt_NodePos)
 {
 	// init defaults
 	Init();
@@ -52,12 +54,12 @@ CSector::CSector(POINT pt_GridPos, POINT pt_NodePos)
 }
 
 
-CSector::~CSector()
+HSector::~HSector()
 {
 }
 
 
-void CSector::Init()
+void HSector::Init()
 {
 	// ## Default Values
 	// NOTE: need when load op failed
@@ -80,13 +82,13 @@ void CSector::Init()
 //////////////////////////////////////////////////////////////////////
 // FILE XML OPs
 //
-void CSector::Save()
+void HSector::Save()
 {
 	// # Form Document
 	tinyxml2::XMLDocument WDocument;
 
 	// # Form XML Header
-	char* str_XMLSpec = "xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
+	char* str_XMLSpec = (char*)"xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
 	tinyxml2::XMLDeclaration* WDeclaration = WDocument.NewDeclaration(str_XMLSpec);
 	WDocument.LinkEndChild(WDeclaration);
 
@@ -151,7 +153,7 @@ void CSector::Save()
 	strcat(strFileName, str_buf);
 
 	// Create Node directory /is don't exist
-	CreateDirectory((CString)strFileName, NULL);
+	CreateDirectory((LPCWSTR)strFileName, NULL);
 
 	strcat(strFileName, "\\Sector");
 
@@ -164,7 +166,7 @@ void CSector::Save()
 	strcat(strFileName, str_buf);
 
 	// Create Sector directory
-	CreateDirectory((CString)strFileName, NULL);
+	CreateDirectory((LPCWSTR)strFileName, NULL);
 
 	strcat(strFileName, "\\Sector.xml");
 
@@ -172,7 +174,7 @@ void CSector::Save()
 }
 
 
-void CSector::Load()
+void HSector::Load()
 {
 	// > Form Document
 	tinyxml2::XMLDocument WDocument;
@@ -227,7 +229,7 @@ void CSector::Load()
 }
 
 
-void CSector::DebugBillet01(void)
+void HSector::DebugBillet01(void)
 {
 	// > Set  Value
 	m_altitude = 5;

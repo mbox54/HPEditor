@@ -5,7 +5,7 @@
 // Class for Hex_Plot Node representation
 // define Node common logic
 // Container Unit
-// CGridHP <- HPlot <- HNode <- CSector
+// CGridHP <- HPlot <- HNode <- HSector
 // *******************************************************************
 
 // interface file
@@ -20,14 +20,15 @@
 // support
 #include "globals.h"
 
-#include "Terrain.h"
-#include "Schatze.h"
+#include "terrain.h"
+#include "schatze.h"
 
 // container objects
-//#include "Sector.h"
+#include "hsector.h"
 
 // load/save xml file
-#include "..\external\tinyxml2.h"
+#include "../external/tinyxml2.h"
+
 // std vector container
 #include <vector>
 
@@ -69,7 +70,7 @@ public:
 	// # Sector Container
 	POINT m_NetSize;
 	
-//	std::vector < std::vector< CSector > > v_Sectors;
+	std::vector < std::vector< HSector > > v_Sectors;
 
 	// # Internal
 	// Terrain

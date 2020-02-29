@@ -8,6 +8,8 @@
 
 // implementation file
 
+#define _CRT_SECURE_NO_WARNINGS
+
 
 //////////////////////////////////////////////////////////////////////
 // Includes
@@ -110,7 +112,7 @@ void HNode::Save()
 	tinyxml2::XMLDocument WDocument;
 
 	// # Form XML Header
-	char * str_XMLSpec = "xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
+	char * str_XMLSpec = (char*)"xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
 	tinyxml2::XMLDeclaration* WDeclaration = WDocument.NewDeclaration(str_XMLSpec);
 	WDocument.LinkEndChild(WDeclaration);
 
@@ -191,7 +193,7 @@ void HNode::Save()
 	strcat(strFileName, str_buf);
 
 	// Create Node directory
-	CreateDirectory((CString)strFileName, NULL);
+	CreateDirectory((LPCWSTR)strFileName, NULL);
 
 	strcat(strFileName, "\\Node.xml");
 
@@ -280,7 +282,7 @@ void HNode::PlaceNet()
 	for (WORD usCoorY = 0; usCoorY < this->m_NetSize.y; usCoorY++)
 	{
 		// Allocate memory: Vector for Row /in Sector Vector container
-		this->v_Sectors.push_back(std::vector<CSector>());
+		this->v_Sectors.push_back(std::vector<HSector>());
 
 		// Fill Cols
 		for (WORD usCoorX = 0; usCoorX < this->m_NetSize.x; usCoorX++)
@@ -293,7 +295,7 @@ void HNode::PlaceNet()
 			//this->MemToHex(CoordMem, &pt_NetCoords);
 
 			// create Sector instance
-			CSector Sector(m_position, CoordMem);
+			HSector Sector(m_position, CoordMem);
 
 			// allocate memory: Sector in 2x Cell /in Vector container
 			this->v_Sectors[usCoorY].push_back(Sector);

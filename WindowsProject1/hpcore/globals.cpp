@@ -4,6 +4,7 @@
 
 // implementation file
 
+#define _CRT_SECURE_NO_WARNINGS
 
 
 //////////////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@ BYTE GetStrTag(char * strParse, char * strOutput, char chOpenSymbol, char chClos
 
 				act = 0;
 
-				strOutput = "NULL_START";
+				strcpy(strOutput, "NULL_START");
 				return OP_FAILURE;
 			}
 			else
@@ -71,7 +72,7 @@ BYTE GetStrTag(char * strParse, char * strOutput, char chOpenSymbol, char chClos
 
 					act = 0;
 
-					strOutput = "NULL_END";
+					strcpy(strOutput, "NULL_END");
 					return OP_FAILURE;
 				}
 				else
@@ -126,7 +127,7 @@ BYTE GetStrTag(char * strParse, char * strOutput, char chOpenSymbol, char chClos
 	 // SafeCheck
 	if (ucFstPos > ucEndPos)
 	{
-		strOutput = "PARSE_ERROR";
+		strcpy(strOutput, "PARSE_ERROR");
 		return OP_FAILURE;
 	}
 
@@ -194,7 +195,7 @@ BYTE Read_config(stHPFileGlobals* var_stGlobals)
 {
 	// > Open File (config)
 	// default name
-	char* file_name = "res/variables.ini";
+	char* file_name = (char*)"res/variables.ini";
 
 	// try open
 	FILE* fs = fopen(file_name, "r");
@@ -309,13 +310,13 @@ BYTE Read_config(stHPFileGlobals* var_stGlobals)
 					char str_param[MAX_STR_PARAM];
 
 					// parse parameters
-					if (GetStrParam(str_buf, "dir", str_param) == 0)
+					if (GetStrParam(str_buf, (char*)"dir", str_param) == 0)
 					{
 						// > Apply config Value
 						strcpy(var_stGlobals->cDirectoryPath, str_param);
 
 					}
-					else if (GetStrParam(str_buf, "etc", str_param) == 0)
+					else if (GetStrParam(str_buf, (char*)"etc", str_param) == 0)
 					{
 						// set value
 						// none

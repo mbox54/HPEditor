@@ -104,14 +104,14 @@ void HPlot::AddNode(POINT gridPos)
 		// [NEED TO ADD LINE]
 
 		// allocate memory: Vector for Row /in Node Vector container
-		this->v_NodesHP.push_back(std::vector<CNodeHP>());
+		this->v_NodesHP.push_back(std::vector<HNode>());
 	}
 
 	// create Node instance
-	CNodeHP NodeHP(gridPos);
+	HNode Node_inst(gridPos);
 
 	// allocate memory: Node in 2x Cell /in Node Vector container
-	this->v_NodesHP[gridPos.y].push_back(NodeHP);
+	this->v_NodesHP[gridPos.y].push_back(Node_inst);
 }
 
 // Place Defined Node-Unit Net in Memory

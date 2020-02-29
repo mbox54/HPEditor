@@ -5,7 +5,7 @@
 // Class for Hex_Plot Plot representation
 // define Plot common logic
 // Container Unit
-// CGridHP <- HPlot <- CNodeHP <- CSector
+// CGridHP <- HPlot <- CNodeHP <- HSector
 // *******************************************************************
 
 // interface file
@@ -18,8 +18,10 @@
 //////////////////////////////////////////////////////////////////////
 // container objects
 #include "hnode.h"
+
 // load/save xml file
-#include "..\external\tinyxml2.h"
+#include "../external/tinyxml2.h"
+
 // std vector container
 #include <vector>
 
@@ -49,7 +51,7 @@ public:
 
 	POINT m_gridSize;
 
-	std::vector < std::vector< CNodeHP > > v_NodesHP;
+	std::vector < std::vector< HNode > > v_NodesHP;
 
 	// Borders: Allowed directions
 	BYTE v_incidence[6];

@@ -16,6 +16,12 @@
     <Filter Include="HPCore">
       <UniqueIdentifier>{d150994b-4352-48a7-9f73-cc2bec9a7b99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HPCore\element">
+      <UniqueIdentifier>{1f5321ca-a8dc-44e4-bcbf-54a1b370ea0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{3a732320-b6e1-4b1e-a8de-0826ca5577eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -44,6 +50,27 @@
     </ClInclude>
     <ClInclude Include="hpcore\hhexlogic.h">
       <Filter>HPCore</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\htypedefs.h">
+      <Filter>HPCore</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\hsector.h">
+      <Filter>HPCore</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\weg.h">
+      <Filter>HPCore\element</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\trasse.h">
+      <Filter>HPCore\element</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\schatze.h">
+      <Filter>HPCore\element</Filter>
+    </ClInclude>
+    <ClInclude Include="hpcore\terrain.h">
+      <Filter>HPCore\element</Filter>
+    </ClInclude>
+    <ClInclude Include="external\tinyxml2.h">
+      <Filter>external</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +110,24 @@
     </ClCompile>
     <ClCompile Include="hpcore\hhexlogic.cpp">
       <Filter>HPCore</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\hsector.cpp">
+      <Filter>HPCore</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\weg.cpp">
+      <Filter>HPCore\element</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\trasse.cpp">
+      <Filter>HPCore\element</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\schatze.cpp">
+      <Filter>HPCore\element</Filter>
+    </ClCompile>
+    <ClCompile Include="hpcore\terrain.cpp">
+      <Filter>HPCore\element</Filter>
+    </ClCompile>
+    <ClCompile Include="external\tinyxml2.cpp">
+      <Filter>external</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
