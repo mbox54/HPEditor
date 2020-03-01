@@ -21,18 +21,34 @@
 // -------------------------------------------------------------------
 // class Hhexlogic
 // -------------------------------------------------------------------
+// NOTE:
+// New/Load usecases:
+// 1. from NULL
+// - create NULL object by calling Hhexlogic(), 
+// - set grid size by calling SetGridSize(POINT gridSize)
+// + load nodes by calling LoadNode(POINT gridPos)
+// + load all nodes by calling Load()
+// + work with empty nodes, fill it by self
+//
+// 2. load immediately
+// - create with size param, Hhexlogic(POINT gridSize)
+// + load nodes by calling LoadNode(POINT gridPos)
+// + load all nodes by calling Load()
+// + work with empty nodes, fill it by self
+//
+
+
 template<class T>
 Hhexlogic<T>::Hhexlogic()
 {
 	// defaults
-	m_gridSize.x = 0;
-	m_gridSize.y = 0;
+	Init();
+}
 
-	for (BYTE k = 0; k < 6; k++)
-	{
-		// no incident
-		mv_incidence[k] = 0;
-	}	
+template<class T>
+Hhexlogic<T>::Hhexlogic(POINT gridSize)
+{
+	m_gridSize = gridSize;
 }
 
 template<class T>
@@ -42,16 +58,104 @@ Hhexlogic<T>::~Hhexlogic()
 }
 
 template<class T>
-void Hhexlogic<T>::AddNode(POINT gridPos)
+void Hhexlogic<T>::Init()
+{
+	// defaults
+	m_gridSize.x = 0;
+	m_gridSize.y = 0;
+
+	for (BYTE k = 0; k < 6; k++)
+	{
+		// no incident
+		mv_incidence[k] = 0;
+	}
+}
+
+// Node operations
+// NOTE:
+// structure of usage:
+// NodeRowAdd()						pushes node to end
+// NodeColAdd()						pushes node to end
+// NodeRowRemove()					remove last node
+// NodeColRemove()					remove last node
+// NodeRowPaste(usIndex)			inserts node upon Index
+// NodeColPaste(usIndex)			inserts node upon Index
+// NodeRowCut(usIndex)				deletes node upon Index
+// NodeColCut(usIndex)				deletes node upon Index
+// UpdateGridMemory()				edit mv_grid upon m_gridSize
+// SetGridSize(gridSize)			sets m_gridSize upon gridSize, call UpdateGridMemory()
+//
+//
+//
+
+
+template<class T>
+void Hhexlogic<T>::NodeRowAdd()
 {
 	// check boundaries
 	if (gridPos.y < m_gridSize.y)
 	{
 		// allocate memory: can just push to back element in specific row
 		this->mv_grid[gridPos.y].push_back(T);
-	}	
+	}
 }
 
+template<class T>
+void Hhexlogic<T>::NodeColAdd()
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::NodeRowRemove()
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::NodeColRemove()
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::NodeRowPaste(WORD usIndex)
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::NodeColPaste(WORD usIndex)
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::NodeRowCut(WORD usIndex)
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::NodeColCut(WORD usIndex)
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::UpdateGridMemory()
+{
+
+}
+
+template<class T>
+void Hhexlogic<T>::SetGridSize(POINT gridSize)
+{
+
+}
+
+
+// file ops
 template<class T>
 void Hhexlogic<T>::LoadNode(POINT gridPos)
 {
@@ -67,12 +171,21 @@ void Hhexlogic<T>::SetGridSize(POINT gridSize)
 	this->m_gridSize = gridSize;
 }
 
+// Place Defined Node-Unit Net in Memory
+// NOTE:
+// FORMAT:
+// Y = RowNumber, X = ColNumber
+//
+// vector structure v_Nodes has specific:
+// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
+// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
+// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
+// ...
+// so v_Nodes[Y][X] has (Y, X) placement order
 template<class T>
-void Hhexlogic<T>::PlaceGridNull(void)
+void Hhexlogic<T>::PlaceGrid(void)
 {
 	// > Fill Rows
-	POINT CoordGrid;
-
 	for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
 	{
 		// allocate memory: Vector for Row /in Node Vector container
@@ -84,38 +197,9 @@ void Hhexlogic<T>::PlaceGridNull(void)
 			// allocate memory: Node in 2x Cell /in Node Vector container
 			this->mv_grid[uiCoorY].push_back( T );
 		}//for (WORD uiCoorX
+
 	}//for (WORD uiCoorY
 
-}
-
-template<class T>
-void Hhexlogic<T>::PlaceGridFill(void)
-{
-	// > Fill Rows
-	POINT CoordGrid;
-
-	for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
-	{
-		// allocate memory: Vector for Row /in Node Vector container
-		this->mv_grid.push_back(std::vector< T >());
-
-		// Fill Cols
-		for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
-		{
-			// define Coord to set
-			CoordGrid.y = uiCoorY;
-			CoordGrid.x = uiCoorX;
-
-			// create Node instance
-			T T_inst(CoordGrid);
-
-			// allocate memory: Node in 2x Cell /in Node Vector container
-			this->mv_grid[uiCoorY].push_back(T_inst);
-
-			// Load Node Values
-			this->LoadNode(CoordGrid);
-		}//for (WORD uiCoorX
-	}//for (WORD uiCoorY
 }
 
 // straight shortest line from nodeFirst to nodeLast
@@ -259,17 +343,25 @@ void Hhexlogic<T>::StraightWeg(POINT nodeFirst, POINT nodeLast, CWeg* p_wegOutpu
 	}//while (act)
 }
 
-// virtual
+
 template<class T>
 void Hhexlogic<T>::Save()
 {
 }
 
+// Load Grid: Size, v_Nodes From File/Base
 template<class T>
 void Hhexlogic<T>::Load()
 {
+	for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
+	{
+		for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
+		{
+			// fill node with stored data
+			this->mv_grid[gridPos.y][gridPos.x].Load();
+		}
+	}
 }
-
 
 // archive
 //void HNode::FillSectors()

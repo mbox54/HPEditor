@@ -1,5 +1,9 @@
 // pkdialog.cpp: implementation of the PKDialog class.
-//
+// 
+// PKDialog is stadalone class, singleton
+// - incorporate all specific controls, that dialog needs 
+// - has poiner variables and a way to perform subclassing 
+//   calling all controls window procedures
 ////////////////////////////////////////////////////////////
 
 

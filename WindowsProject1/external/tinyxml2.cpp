@@ -21,6 +21,7 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
+// NOTE: static header
 #include "../project.h"
 #include "tinyxml2.h"
 

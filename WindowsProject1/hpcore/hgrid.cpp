@@ -1,96 +1,49 @@
 // GridHP.cpp
 
 // \ INFO
-// *******************************************************************
+////////////////////////////////////////////////////////////
 // Class for Hex_Plot Grid representation
 // define Grid common logic
 // Grid include Nodes
-// *******************************************************************
+////////////////////////////////////////////////////////////
 
 // implementation file
 
 #define _CRT_SECURE_NO_WARNINGS
 
 
-//////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 // Includes
-//////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 #include "../project.h"
 #include "hgrid.h"
 
 
-// ===================================================================
+////////////////////////////////////////////////////////////
 // class HGrid
-// ===================================================================
+////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 // Constructor, init section
 //
-HGrid::HGrid()
-{
-	// Init
-	Init();
-
-	// XML FILE OP
-	//!debug
-	/////////////////////////////////////////////////////
-	// NO FILE INITIATION CASE
-	/////////////////////////////////////////////////////
-	// DEBUG: use test config Billet
-	DebugBillet01();
-
-	Load();
-
-	// > Place Net: create Nodes
-	PlaceNet();
-
-
-	// !debug
-	//// create Node path
-	//CWeg nodeWeg;
-
-	//// fill weg
-	//for (BYTE k = 0; k < 5; k++)
-	//{
-	//	// form wegKnot
-	//	stWegKnot wegKnot;
-
-	//	wegKnot.xyCoord.x = k;
-	//	wegKnot.xyCoord.y = k;
-
-	//	wegKnot.uiNumber = k;
-
-	//	// set el
-	//	nodeWeg.Add(wegKnot);
-	//}
-
-	////m_Trasse.Add
-	//m_Trasse.Add(nodeWeg);
-}
-
-// CASE: 
-// use VS Win Static control as canvas for graphics
-// NOTE:
-// this realisation attach Canvas upon OnInit stage!
-//HGrid::HGrid(CStaticHP * p_CanvasHP)
-//	: p_CanvasHP(p_CanvasHP)
+//HGrid::HGrid()
 //{
 //	// Init
 //	Init();
 //
-//}
-
-
-HGrid::~HGrid()
-{
-
-}
-
-
-void HGrid::SetGridSize(POINT gridSize)
-{
-	this->m_gridSize = gridSize;
-}
+//	// XML FILE OP
+//	//!debug
+//	/////////////////////////////////////////////////////
+//	// NO FILE INITIATION CASE
+//	/////////////////////////////////////////////////////
+//	// DEBUG: use test config Billet
+//	DebugBillet01();
+//
+//	Load();
+//
+//	// > Place Net: create Nodes
+//	PlaceNet();
+//
 
 
 // Construct & Fill v_Nodes
@@ -101,59 +54,10 @@ void HGrid::Init()
 	// Init properties	
 	// [m_strWastName]
 	strcpy(m_strWastName, "unnamed");
-
-	// [m_gridSize] 
-	POINT pt_Size;
-	pt_Size.x = SIDESIZE;
-	pt_Size.y = SIDESIZE;
-
-	m_gridSize = pt_Size;
-
 }
 
-// Place Defined Node-Unit Net in Memory
-// NOTE:
-// FORMAT:
-// Y = RowNumber, X = ColNumber
-//
-// vector structure v_Nodes has specific:
-// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
-// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
-// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
-// ...
-// so v_Nodes[Y][X] has (Y, X) placement order
-void HGrid::PlaceNet()
-{
-	// > Fill Rows
-	POINT CoordGrid;
 
-	for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
-	{
-		// allocate memory: Vector for Row /in Node Vector container
-		this->mv_grid.push_back(std::vector<HPlot>());
-
-		// Fill Cols
-		for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
-		{
-			// define Coord to set
-			CoordGrid.y = uiCoorY;
-			CoordGrid.x = uiCoorX;
-			
-			// create Node instance
-			HNode NodeHP(CoordGrid);
-
-			// allocate memory: Node in 2x Cell /in Node Vector container
-			this->mv_grid[uiCoorY].push_back(HPlot());
-
-			// Load Node Values
-			this->LoadNode(CoordGrid);
-		}//for (WORD uiCoorX
-	}//for (WORD uiCoorY
-
-}
- 
-
-//////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 // Common methods section
 //
 //void HGrid::AddNode()
@@ -161,23 +65,6 @@ void HGrid::PlaceNet()
 //	HNode Node1;
 //}
 //
-// Load Grid: Size, v_Nodes From File/Base
-void HGrid::LoadNode(POINT gridPos)
-{
-	this->mv_grid[gridPos.y][gridPos.x].Load();
-
-	// set Node
-	//v_Nodes
-
-	
-
-	// > Paint Node
-	// calc Coords
-	// // get Graph parameters
-	//p_CanvasHP->
-
-	//p_CanvasHP->PaintGrid();
-}
 
 
 
@@ -356,7 +243,7 @@ void HGrid::EstimateWegCost(POINT nodeFirst, POINT nodeLast)
 
 }
 
-//////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 // FILE XML OPs
 //
 void HGrid::Save()
@@ -484,6 +371,17 @@ void HGrid::Load()
 
 }
 
+
+void HGrid::SaveGrid()
+{
+
+}
+
+
+void HGrid::LoadGrid()
+{
+
+}
 
 //////////////////////////////////////////////////////////////////////
 // Debug, Test section
