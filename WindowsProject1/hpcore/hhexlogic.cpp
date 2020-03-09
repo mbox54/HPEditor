@@ -316,6 +316,94 @@ void Hhexlogic<T>::NodeColCut(WORD usRowIndex, WORD usIndex)
 	}
 }
 
+// Work with grid as rectangular field
+// used base node methods
+// NOTE:
+// used x=cols gridSize value to control x-demention size
+// FORMAT: 
+// add row with auto-add cols size of m_size.x in this row
+// add col with auto-add cols size of m_size.x in every row
+template<class T>
+void Hhexlogic<T>::NodeRect_RowAdd()
+{
+	// add new row
+	NodeRowAdd();
+	// NOTE:
+	// gridSize.y performed auto (in NodeRowAdd())
+
+	// place cols
+	for (WORD k = 0; k < m_gridSize.x; k++)
+	{
+		// add col
+		NodeColAdd(m_gridSize.y - 1);
+	}
+}
+
+template<class T>
+void Hhexlogic<T>::NodeRect_ColAdd()
+{
+	// check boundaries
+	if (m_gridSize.x < mc_gridMaxSize.x)
+	{
+		// [VALID]
+
+		// add cols in every row
+		for (WORD k = 0; k < m_gridSize.y - 1; k++)
+		{
+			// add col
+			NodeColAdd(k);
+		}
+
+		// inc size.x
+		// NOTE:
+		// gridSize.x must performed in this method
+		m_gridSize.x++;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
+}
+
+template<class T>
+void Hhexlogic<T>::NodeRect_RowRemove()
+{
+	// just remove the last row, all cols being removed auto 
+	NodeRowRemove();
+}
+
+template<class T>
+void Hhexlogic<T>::NodeRect_ColRemove()
+{
+	// remove all last cols
+	// check boundaries
+	if (m_gridSize.x > 0)
+	{
+		// [VALID]
+
+		// add cols in every row
+		for (WORD k = 0; k < m_gridSize.y - 1; k++)
+		{
+			// add col
+			NodeColRemove(k);
+		}
+
+		// dec size.x
+		// NOTE:
+		// gridSize.x must performed in this method
+		m_gridSize.x++;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
+}
+
+// node / service
 template<class T>
 void Hhexlogic<T>::UpdateGridMemory()
 {

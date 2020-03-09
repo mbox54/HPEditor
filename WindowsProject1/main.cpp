@@ -10,8 +10,8 @@
 // + [23.02.20] [01.03.20] place Wast Grid logic here
 // - [01.03.20] place CMD "new" with empty wast file in dialog
 // - [01.03.20] prepare function for CMD "new" with empty HPGrid and support
-// - [01.03.20] complete nodes OPs in "hhexlogic"
-
+// + [01.03.20] [09.03.20] complete nodes base OPs in "hhexlogic"
+// + [09.03.20] [09.03.20] complete nodes extended OPs in "hhexlogic"
 
 
 ////////////////////////////////////////////////////////////

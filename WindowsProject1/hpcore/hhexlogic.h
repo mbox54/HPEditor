@@ -66,7 +66,7 @@ public:
 	// * * * methods * * *
 	void Init();
 
-	// nodes
+	// nodes / base
 	void NodeRowAdd();
 	void NodeColAdd(WORD usRowIndex);
 	void NodeRowRemove();
@@ -75,8 +75,13 @@ public:
 	void NodeColPaste(WORD usRowIndex, WORD usIndex);
 	void NodeRowCut(WORD usIndex);
 	void NodeColCut(WORD usRowIndex, WORD usIndex);
-	
-	// node /file
+	// nodes / extended
+	void NodeRect_RowAdd();
+	void NodeRect_ColAdd();
+	void NodeRect_RowRemove();
+	void NodeRect_ColRemove();
+
+	// node / file
 	void LoadNode(POINT gridPos);
 
 	// with grid
