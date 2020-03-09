@@ -33,6 +33,10 @@
 template <class T>
 class Hhexlogic
 {
+static constexpr auto MAX_SIZE_ROWS_DEFAULT = 48;
+static constexpr auto MAX_SIZE_COLS_DEFAULT = 48;
+
+
 public:
 	// constuctor
 	Hhexlogic();
@@ -45,6 +49,7 @@ public:
 	// > > Node Container
 	// dementions size
 	POINT m_gridSize;
+	POINT mc_gridMaxSize;
 
 	// Borders: Allowed directions, as core node
 	BYTE mv_incidence[6];
@@ -63,22 +68,21 @@ public:
 
 	// nodes
 	void NodeRowAdd();
-	void NodeColAdd();
+	void NodeColAdd(WORD usRowIndex);
 	void NodeRowRemove();
-	void NodeColRemove();
+	void NodeColRemove(WORD usRowIndex);
 	void NodeRowPaste(WORD usIndex);
-	void NodeColPaste(WORD usIndex);
+	void NodeColPaste(WORD usRowIndex, WORD usIndex);
 	void NodeRowCut(WORD usIndex);
-	void NodeColCut(WORD usIndex);
-	void UpdateGridMemory();
-	void SetGridSize(POINT gridSize);
-
-
+	void NodeColCut(WORD usRowIndex, WORD usIndex);
+	
+	// node /file
 	void LoadNode(POINT gridPos);
 
 	// with grid
 	void SetGridSize(POINT gridSize);
-	
+	void UpdateGridMemory();
+
 	// set up in memory
 	void PlaceGrid(void);
 

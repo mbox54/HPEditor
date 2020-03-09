@@ -64,6 +64,9 @@ void Hhexlogic<T>::Init()
 	m_gridSize.x = 0;
 	m_gridSize.y = 0;
 
+	mc_gridMaxSize.y = MAX_SIZE_ROWS_DEFAULT;
+	mc_gridMaxSize.x = MAX_SIZE_COLS_DEFAULT;
+
 	for (BYTE k = 0; k < 6; k++)
 	{
 		// no incident
@@ -87,69 +90,234 @@ void Hhexlogic<T>::Init()
 //
 //
 //
-
+// FORMAT:
+//		X00	X01	X02	X03	...	Xi	...	XN
+// YM	[#]	[#]	[#]	[#]	[#]	[#]	[#]	[#]
+// ...	[#]	[#]	[#]	[#]	[#]	[#]	[#]	[#]
+// Yj	[#]	[#]	[#]	[#]	[#]	[#]	[#]	[#]
+// ...	[#]	[#]	[#]	[#]	[#]	[#]	[#]	[#]
+// Y03	[#]	[#]	[#]	[#]	[#]	[#]	[#]	[#]
+// Y02	[#]	[#]	[#]	[#]	[#]	[#]	[#]	[#]
+// Y01	[#]	[#]	[#]	[#]	[#]	[#]	[#]	[#]
+//
+// Y = Row, X = Col
+//
+// vector structure mv_grid has specific:
+// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
+// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
+// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
+// ...
+// mv_grid[Y][X] has (Y, X) placement order
+// vector mv_grid[gridPos.y][gridPos.x]
 
 template<class T>
 void Hhexlogic<T>::NodeRowAdd()
 {
-	// check boundaries
-	if (gridPos.y < m_gridSize.y)
+	// check max boundaries
+	if (m_gridSize.y < mc_gridMaxSize.y)
 	{
-		// allocate memory: can just push to back element in specific row
-		this->mv_grid[gridPos.y].push_back(T);
+		// [VALID]
+
+		// add row
+		// allocate memory: just push to back
+		this->mv_grid.push_back(T);
+
+		// inc Row count
+		m_gridSize.y++;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
 	}
 }
 
+// NOTE: in this (vector) approach to implement [x,y] grid
+// there are some constraints exist:
+// 'X' elements may be various on any 'Y', not equal in every 'Y'
+// so if equal value must be performed, 
+// that work must be controlled by developer. I.e. in spec function.
 template<class T>
-void Hhexlogic<T>::NodeColAdd()
+void Hhexlogic<T>::NodeColAdd(WORD usRowIndex)
 {
+	// check max boundaries
+	WORD usColCount = mv_grid.capacity();
 
+	if (usColCount < mc_gridMaxSize.x)
+	{
+		// [VALID]
+
+		// add col
+		// allocate memory: just push to back element in specific row
+		this->mv_grid[usRowIndex].push_back(T);
+
+		// inc Col count
+		// NOTE: not applied here now
+		//usColCount++;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
 }
 
 template<class T>
 void Hhexlogic<T>::NodeRowRemove()
 {
+	// check min boundaries
+	if (m_gridSize.y > 0)
+	{
+		// [VALID]
 
+		// delete row
+		// allocate memory: just pop back element
+		this->mv_grid.pop_back();
+
+		// inc Row count
+		m_gridSize.y--;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
 }
 
+// NOTE: in this (vector) approach to implement [x,y] grid
+// there are some constraints exist:
+// 'X' elements may be various on any 'Y', not equal in every 'Y'
+// so if equal value must be performed, 
+// that work must be controlled by developer. I.e. in spec function.
 template<class T>
-void Hhexlogic<T>::NodeColRemove()
+void Hhexlogic<T>::NodeColRemove(WORD usRowIndex)
 {
+	// check min boundaries
+	WORD usColCount = mv_grid.capacity();
 
+	if (usColCount > 0)
+	{
+		// [VALID]
+
+		// delete col
+		// allocate memory: just pop back element in specific row
+		this->mv_grid[usRowIndex].pop_back();
+
+		// dec Col count
+		// NOTE: not applied here now
+		//usColCount--;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
 }
 
 template<class T>
 void Hhexlogic<T>::NodeRowPaste(WORD usIndex)
 {
+	// check max boundaries
+	if (m_gridSize.y < mc_gridMaxSize.y)
+	{
+		// [VALID]
 
+		// add row
+		// allocate memory: insert element in specific position
+		this->mv_grid.insert(usIndex, T);
+
+		// inc Row count
+		m_gridSize.y++;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
 }
 
 template<class T>
-void Hhexlogic<T>::NodeColPaste(WORD usIndex)
+void Hhexlogic<T>::NodeColPaste(WORD usRowIndex, WORD usIndex)
 {
+	// check max boundaries
+	WORD usColCount = mv_grid.capacity();
 
+	if (usColCount < mc_gridMaxSize.x)
+	{
+		// [VALID]
+
+		// add col
+		// allocate memory: insert element in specific position in specific row
+		this->mv_grid[usRowIndex].insert(usIndex, T);
+
+		// inc Col count
+		// NOTE: not applied here now
+		//usColCount++;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
 }
 
 template<class T>
 void Hhexlogic<T>::NodeRowCut(WORD usIndex)
 {
+	// check min boundaries
+	if (m_gridSize.y > 0)
+	{
+		// [VALID]
 
+		// cut row
+		// delete from position, move elements to empty pos
+		this->mv_grid.erase(usIndex);
+
+		// inc Row count
+		m_gridSize.y--;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
 }
 
 template<class T>
-void Hhexlogic<T>::NodeColCut(WORD usIndex)
+void Hhexlogic<T>::NodeColCut(WORD usRowIndex, WORD usIndex)
 {
+	// check min boundaries
+	WORD usColCount = mv_grid.capacity();
 
+	if (usColCount > 0)
+	{
+		// [VALID]
+
+		// cut col
+		// allocate memory: just pop back element in specific row
+		this->mv_grid[usRowIndex].erase(usIndex);
+
+		// dec Col count
+		// NOTE: not applied here now
+		//usColCount--;
+	}
+	else
+	{
+		// [INVALID: EXCEED_MAX]
+
+		return;
+	}
 }
 
 template<class T>
 void Hhexlogic<T>::UpdateGridMemory()
-{
-
-}
-
-template<class T>
-void Hhexlogic<T>::SetGridSize(POINT gridSize)
 {
 
 }
@@ -353,14 +521,14 @@ void Hhexlogic<T>::Save()
 template<class T>
 void Hhexlogic<T>::Load()
 {
-	for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
-	{
-		for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
-		{
-			// fill node with stored data
-			this->mv_grid[gridPos.y][gridPos.x].Load();
-		}
-	}
+	//for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
+	//{
+	//	for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
+	//	{
+	//		// fill node with stored data
+	//		this->mv_grid[gridPos.y][gridPos.x].Load();
+	//	}
+	//}
 }
 
 // archive
