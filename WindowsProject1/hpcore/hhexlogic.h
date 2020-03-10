@@ -33,8 +33,8 @@
 template <class T>
 class Hhexlogic
 {
-static constexpr auto MAX_SIZE_ROWS_DEFAULT = 48;
-static constexpr auto MAX_SIZE_COLS_DEFAULT = 48;
+static constexpr WORD MAX_SIZE_ROWS_DEFAULT = 48;
+static constexpr WORD MAX_SIZE_COLS_DEFAULT = 48;
 
 
 public:

@@ -217,7 +217,7 @@ void Canvas::InitCanvas()
 void Canvas::OnPaint()
 {
 	// test
-	m_Draw.DrawPixels();
+	m_Draw.Draw();
 }
 
 // Main Dialog section

@@ -44,6 +44,11 @@ void WastGDIDraw::Init(HWND hWnd)
 	m_hWnd = hWnd;
 
 	GetClientRect(m_hWnd, &m_canvasRect);
+
+	m_layouts.left = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.right = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.top = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.bottom = CANVAS_LAYOUTS_DEFAULT;
 }
 
 
@@ -65,6 +70,34 @@ void WastGDIDraw::DrawPixels()
 		SetPixel(hdc, x, y, RGB(255, 0, 0));
 	}
 
+	EndPaint(m_hWnd, &ps);
+}
+
+void WastGDIDraw::Draw()
+{
+	// # init paint parameters
+	PAINTSTRUCT ps;
+	HDC hdc = BeginPaint(m_hWnd, &ps);
+
+	// set proportional equal demention sizes x = y
+	SetMapMode(hdc, MM_ISOTROPIC); 
+	// set canvas size in my units
+	SetWindowExtEx(hdc, 1000, 1000, NULL); 
+	// set max canvas draw coords position
+	SetViewportExtEx(hdc, m_canvasRect.right - m_layouts.right*2, -(m_canvasRect.bottom - m_layouts.top*2), NULL); 
+	// set start canvas draw coord position
+	SetViewportOrgEx(hdc, m_layouts.left, m_canvasRect.bottom - m_layouts.bottom, NULL);
+
+	// # paint on canvas
+	// test
+	MoveToEx(hdc, 0, 0, NULL);
+	LineTo(hdc, 1000, 1000);
+	LineTo(hdc, 1000, 0);
+	LineTo(hdc, 0, 1000);
+	LineTo(hdc, 0, 500);
+
+
+	// # release resources
 	EndPaint(m_hWnd, &ps);
 }
 

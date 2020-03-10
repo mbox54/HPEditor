@@ -20,7 +20,11 @@
 ////////////////////////////////////////////////////////////
 class WastGDIDraw
 {
-public:
+	static constexpr WORD CANVAS_LAYOUTS_DEFAULT = 10;
+
+
+public:	
+
 	// constructor
 	WastGDIDraw();
 	WastGDIDraw(HWND hWnd);
@@ -39,6 +43,9 @@ public:
 	// test
 	void DrawPixels();
 
+	// Paint current view screen
+	void Draw();
+
 
 private:
 	// > properties
@@ -47,6 +54,7 @@ private:
 
 	// canvas window parameters
 	RECT m_canvasRect;
+	RECT m_layouts;
 
 	//// > > Graphics
 	//// Canvas sourse
