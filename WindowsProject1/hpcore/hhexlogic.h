@@ -33,8 +33,8 @@
 template <class T>
 class Hhexlogic
 {
-static constexpr WORD MAX_SIZE_ROWS_DEFAULT = 48;
-static constexpr WORD MAX_SIZE_COLS_DEFAULT = 48;
+static constexpr WORD MAX_SIZE_ROWS_DEFAULT = 192;
+static constexpr WORD MAX_SIZE_COLS_DEFAULT = 192;
 
 
 public:
@@ -81,15 +81,14 @@ public:
 	void NodeRect_RowRemove();
 	void NodeRect_ColRemove();
 
+	void NodeRect_SetSize(POINT gridSize);
+	void NodeRect_UpdateGrid();
+	void NodeRect_ReplaceGrid(POINT gridSize);
+	void NodeRect_PlaceNewGrid(POINT gridSize);
+
 	// node / file
 	void LoadNode(POINT gridPos);
 
-	// with grid
-	void SetGridSize(POINT gridSize);
-	void UpdateGridMemory();
-
-	// set up in memory
-	void PlaceGrid(void);
 
 	// logic: find straight line point-to-point
 	void StraightWeg(POINT nodeFirst, POINT nodeLast, CWeg* p_wegOutput);

@@ -13,6 +13,7 @@
 // include
 ////////////////////////////////////////////////////////////
 #include "project.h"
+#include "hpcore/hhexlogic.h"
 
 
 ////////////////////////////////////////////////////////////
@@ -21,7 +22,8 @@
 class WastGDIDraw
 {
 	static constexpr WORD CANVAS_LAYOUTS_DEFAULT = 10;
-
+	static constexpr WORD CANVAS_WIDTH_DEFAULT = 1200;
+	static constexpr WORD CANVAS_HEIGTH_DEFAULT = 1000;
 
 public:	
 
@@ -55,6 +57,7 @@ private:
 	// canvas window parameters
 	RECT m_canvasRect;
 	RECT m_layouts;
+	POINT m_pictureSize;
 
 	//// > > Graphics
 	//// Canvas sourse

@@ -142,7 +142,7 @@ template<class T>
 void Hhexlogic<T>::NodeColAdd(WORD usRowIndex)
 {
 	// check max boundaries
-	WORD usColCount = mv_grid.capacity();
+	WORD usColCount = mv_grid[usRowIndex].capacity();
 
 	if (usColCount < mc_gridMaxSize.x)
 	{
@@ -245,7 +245,7 @@ template<class T>
 void Hhexlogic<T>::NodeColPaste(WORD usRowIndex, WORD usIndex)
 {
 	// check max boundaries
-	WORD usColCount = mv_grid.capacity();
+	WORD usColCount = mv_grid[usRowIndex].capacity();
 
 	if (usColCount < mc_gridMaxSize.x)
 	{
@@ -294,7 +294,7 @@ template<class T>
 void Hhexlogic<T>::NodeColCut(WORD usRowIndex, WORD usIndex)
 {
 	// check min boundaries
-	WORD usColCount = mv_grid.capacity();
+	WORD usColCount = mv_grid[usRowIndex].capacity();
 
 	if (usColCount > 0)
 	{
@@ -404,11 +404,96 @@ void Hhexlogic<T>::NodeRect_ColRemove()
 }
 
 // node / service
-template<class T>
-void Hhexlogic<T>::UpdateGridMemory()
-{
 
+// Set new size
+// NOTE: worked with NodeRect_PlaceGrid to apply changes in memory
+template<class T>
+void Hhexlogic<T>::NodeRect_SetSize(POINT gridSize)
+{
+	this->m_gridSize = gridSize;
 }
+
+// TODO: return result
+template<class T>
+void Hhexlogic<T>::NodeRect_UpdateGrid()
+{
+	WORD usRowCount = mv_grid.capacity();
+
+	// safe check
+	if (usRowCount == 0)
+	{
+		if (m_gridSize.y > 0)
+		{
+			// add Row. Critical, because can't add Cols in empty vector
+			NodeRect_RowAdd();
+
+			// add Cols
+			WORD usColCount = mv_grid[0].capacity();
+			for (WORD k = 0; k < m_gridSize.x - usColCount; k++)
+			{				
+				NodeRect_ColAdd();
+			}
+
+			// add Rows
+			for (WORD k = 0; k < m_gridSize.y - usRowCount; k++)
+			{
+				NodeRect_RowAdd();
+			}
+		}
+		else
+		{
+			// no need to do
+			return;
+		}
+	}
+}
+
+// enlarge grid
+// TODO: check direction of editing: enlarge/shorten
+template<class T>
+void Hhexlogic<T>::NodeRect_ReplaceGrid(POINT gridSize)
+{
+	// set new size
+	NodeRect_SetSize(gridSize);
+
+	// correct grid
+	NodeRect_UpdateGrid();
+}
+
+// place from zero-sized
+template<class T>
+void Hhexlogic<T>::NodeRect_PlaceNewGrid(POINT gridSize)
+{
+	// safe check
+	// NOTE: there must be at least 1 Row with 1 Col.
+	if ((gridSize.x >= 1) && (gridSize.y >= 1))
+	{
+		// [VALID]
+
+		// place first Row
+		NodeRect_RowAdd();
+
+		// place row with Cols
+		for (WORD k = 0; k < gridSize.x; k++)
+		{
+			NodeRect_ColAdd();
+		}
+
+		// place Rows
+		for (WORD k = 0; k < gridSize.y - 1; k++)
+		{
+			NodeRect_RowAdd();
+		}
+	}
+	else
+	{
+		// [INVALID]
+
+		return;
+	}
+}
+
+
 
 
 // file ops
@@ -420,43 +505,10 @@ void Hhexlogic<T>::LoadNode(POINT gridPos)
 	this->mv_grid[gridPos.y][gridPos.x].Load();
 }
 
+
 // methods
-template<class T>
-void Hhexlogic<T>::SetGridSize(POINT gridSize)
-{
-	this->m_gridSize = gridSize;
-}
 
-// Place Defined Node-Unit Net in Memory
-// NOTE:
-// FORMAT:
-// Y = RowNumber, X = ColNumber
-//
-// vector structure v_Nodes has specific:
-// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
-// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
-// Allocate Row ---> Allocate Col, Allocate Col, Allocate Col,
-// ...
-// so v_Nodes[Y][X] has (Y, X) placement order
-template<class T>
-void Hhexlogic<T>::PlaceGrid(void)
-{
-	// > Fill Rows
-	for (WORD uiCoorY = 0; uiCoorY < this->m_gridSize.y; uiCoorY++)
-	{
-		// allocate memory: Vector for Row /in Node Vector container
-		this->mv_grid.push_back(std::vector< T >());
 
-		// Fill Cols
-		for (WORD uiCoorX = 0; uiCoorX < this->m_gridSize.x; uiCoorX++)
-		{
-			// allocate memory: Node in 2x Cell /in Node Vector container
-			this->mv_grid[uiCoorY].push_back( T );
-		}//for (WORD uiCoorX
-
-	}//for (WORD uiCoorY
-
-}
 
 // straight shortest line from nodeFirst to nodeLast
 template<class T>

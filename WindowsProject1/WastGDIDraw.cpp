@@ -5,6 +5,9 @@
 ////////////////////////////////////////////////////////////
 // include
 ////////////////////////////////////////////////////////////
+// precompile
+//#include "project.h"
+
 #include "WastGDIDraw.h"
 
 
@@ -20,6 +23,14 @@ WastGDIDraw::WastGDIDraw()
 	m_canvasRect.left = 0;
 	m_canvasRect.right = 0;
 	m_canvasRect.top = 0;
+
+	m_layouts.left = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.right = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.top = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.bottom = CANVAS_LAYOUTS_DEFAULT;
+
+	m_pictureSize.x = CANVAS_WIDTH_DEFAULT;
+	m_pictureSize.y = CANVAS_HEIGTH_DEFAULT;
 }
 
 
@@ -29,6 +40,14 @@ WastGDIDraw::WastGDIDraw(HWND hWnd)
 	m_hWnd = hWnd;
 
 	GetClientRect(m_hWnd, &m_canvasRect);
+
+	m_layouts.left = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.right = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.top = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.bottom = CANVAS_LAYOUTS_DEFAULT;
+
+	m_pictureSize.x = CANVAS_WIDTH_DEFAULT;
+	m_pictureSize.y = CANVAS_HEIGTH_DEFAULT;
 }
 
 
@@ -44,11 +63,6 @@ void WastGDIDraw::Init(HWND hWnd)
 	m_hWnd = hWnd;
 
 	GetClientRect(m_hWnd, &m_canvasRect);
-
-	m_layouts.left = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.right = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.top = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.bottom = CANVAS_LAYOUTS_DEFAULT;
 }
 
 
@@ -73,6 +87,7 @@ void WastGDIDraw::DrawPixels()
 	EndPaint(m_hWnd, &ps);
 }
 
+
 void WastGDIDraw::Draw()
 {
 	// # init paint parameters
@@ -81,20 +96,64 @@ void WastGDIDraw::Draw()
 
 	// set proportional equal demention sizes x = y
 	SetMapMode(hdc, MM_ISOTROPIC); 
-	// set canvas size in my units
-	SetWindowExtEx(hdc, 1000, 1000, NULL); 
+
+	// set canvas size in abstract work units
+	SetWindowExtEx(hdc, m_pictureSize.x, m_pictureSize.y, NULL);
+
 	// set max canvas draw coords position
-	SetViewportExtEx(hdc, m_canvasRect.right - m_layouts.right*2, -(m_canvasRect.bottom - m_layouts.top*2), NULL); 
+	SetViewportExtEx(hdc, 
+		m_canvasRect.right - m_layouts.right - m_layouts.left, // Right_Max = Right_Display - Right_layout - (Zero_Left + Left_layout)
+		-(m_canvasRect.bottom - m_layouts.top - m_layouts.bottom), // also with top
+		NULL); 
+
 	// set start canvas draw coord position
 	SetViewportOrgEx(hdc, m_layouts.left, m_canvasRect.bottom - m_layouts.bottom, NULL);
 
 	// # paint on canvas
 	// test
-	MoveToEx(hdc, 0, 0, NULL);
-	LineTo(hdc, 1000, 1000);
-	LineTo(hdc, 1000, 0);
-	LineTo(hdc, 0, 1000);
-	LineTo(hdc, 0, 500);
+	//MoveToEx(hdc, 0, 0, NULL);
+	//LineTo(hdc, 1200, 1000);
+	//LineTo(hdc, 1200, 0);
+	//LineTo(hdc, 0, 1000);
+	//LineTo(hdc, 0, 500);
+
+	// place Grid blueprint map
+	// NOTE:
+	// Hex based on equilateral triangle. 
+	// - equilateral triangle: side = a, higth = h = a * 3^0.5 / 2
+
+	// define coord centers
+	WORD usSideA = 50;
+	WORD usHexColCount = m_pictureSize.x / usSideA;
+	WORD usHexRowCount = m_pictureSize.y / usSideA;
+
+	// create logic
+	Hhexlogic <POINT> v_HexPts;
+	POINT hexgridSize{ usHexColCount, usHexRowCount };
+	v_HexPts.NodeRect_PlaceNewGrid(hexgridSize);
+	
+	// fill coords
+	for (WORD y = 0; y < usHexRowCount; y++)
+	{
+		for (WORD x = 0; x < usHexColCount; x++)
+		{
+			v_HexPts.mv_grid[y][x].x = usSideA * x - (usSideA / 2) * (x % 2);
+			v_HexPts.mv_grid[y][x].y = usSideA * y * 3 ^ (1 / 2) / 2;
+		}
+	}
+
+	// draw points
+	for (WORD y = 0; y < usHexRowCount; y++)
+	{
+		for (WORD x = 0; x < usHexColCount; x++)
+		{
+			// draw
+
+		}
+	}
+
+	// draw hex
+	
 
 
 	// # release resources
