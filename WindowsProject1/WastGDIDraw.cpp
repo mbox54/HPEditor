@@ -6,8 +6,7 @@
 // include
 ////////////////////////////////////////////////////////////
 // precompile
-//#include "project.h"
-
+#include "project.h"
 #include "WastGDIDraw.h"
 
 
@@ -125,20 +124,27 @@ void WastGDIDraw::Draw()
 	// define coord centers
 	WORD usSideA = 50;
 	WORD usHexColCount = m_pictureSize.x / usSideA;
-	WORD usHexRowCount = m_pictureSize.y / usSideA;
+	float fh = usSideA * sqrt(3) / 2;
+	float fHeigth = m_pictureSize.y / fh;
+	WORD usHexRowCount = (WORD)fHeigth;
 
 	// create logic
+
+
 	Hhexlogic <POINT> v_HexPts;
 	POINT hexgridSize{ usHexColCount, usHexRowCount };
 	v_HexPts.NodeRect_PlaceNewGrid(hexgridSize);
 	
 	// fill coords
+	float fCoord;
 	for (WORD y = 0; y < usHexRowCount; y++)
 	{
 		for (WORD x = 0; x < usHexColCount; x++)
 		{
-			v_HexPts.mv_grid[y][x].x = usSideA * x - (usSideA / 2) * (x % 2);
-			v_HexPts.mv_grid[y][x].y = usSideA * y * 3 ^ (1 / 2) / 2;
+			v_HexPts.mv_grid[y][x].x = usSideA * x + (usSideA / 2) * (y % 2);
+
+			fCoord = y * fh;			
+			v_HexPts.mv_grid[y][x].y = (WORD)fCoord;
 		}
 	}
 
@@ -148,7 +154,7 @@ void WastGDIDraw::Draw()
 		for (WORD x = 0; x < usHexColCount; x++)
 		{
 			// draw
-
+			SetPixel(hdc, v_HexPts.mv_grid[y][x].x, v_HexPts.mv_grid[y][x].y, RGB(0, 0, 255));
 		}
 	}
 
