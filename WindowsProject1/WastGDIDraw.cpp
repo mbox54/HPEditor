@@ -122,7 +122,7 @@ void WastGDIDraw::Draw()
 	// - equilateral triangle: side = a, higth = h = a * 3^0.5 / 2
 
 	// define coord centers
-	WORD usSideA = 50;
+	WORD usSideA = 60;
 	WORD usHexColCount = m_pictureSize.x / usSideA;
 	float fh = usSideA * sqrt(3) / 2;
 	float fHeigth = m_pictureSize.y / fh;
@@ -159,11 +159,78 @@ void WastGDIDraw::Draw()
 	}
 
 	// draw hex
-	
-
+	Hex(hdc, v_HexPts.mv_grid[4][5], usSideA);
+	Hex(hdc, v_HexPts.mv_grid[4][6], usSideA);
+	Hex(hdc, v_HexPts.mv_grid[5][5], usSideA);
+	Hex(hdc, v_HexPts.mv_grid[1][4], usSideA);
+	Hex(hdc, v_HexPts.mv_grid[8][6], usSideA);
+	Hex(hdc, v_HexPts.mv_grid[2][9], usSideA);
+	Hex(hdc, v_HexPts.mv_grid[9][11], usSideA);
 
 	// # release resources
 	EndPaint(m_hWnd, &ps);
+}
+
+// FORMAT:
+// a		.....#..... 
+// bl, br	..#.....#..
+// cl, cr	..#.....#..
+// d		.....#.....
+// o - coord center
+void WastGDIDraw::Hex(HDC hdc, POINT ptCoord, WORD usSideA)
+{
+	// accelerate float operations
+	float fSqrt3SideA = usSideA * sqrt(3);
+	WORD usSqrt3SideA = (WORD)fSqrt3SideA;
+	if (fSqrt3SideA - usSqrt3SideA > 0.5)
+	{
+		usSqrt3SideA++;
+	}
+
+	// coords store vector
+	POINT v_ptHex[6];
+
+	// NOTE: 
+	// not actually optimized, direct calculation approach
+
+	// init point = a
+	// xa = xo
+	// ya = yo + sideA * 3^0.5 / 3
+	v_ptHex[0].x = ptCoord.x;
+	v_ptHex[0].y = ptCoord.y + usSqrt3SideA / 3;
+
+	// next point = br
+	// xbr = xo + sideA / 2
+	// ybr = yo + sideA * 3^0.5 / 6
+	v_ptHex[1].x = ptCoord.x + usSideA / 2;
+	v_ptHex[1].y = ptCoord.y + usSqrt3SideA / 6;
+
+	// next point = cr
+	// xcr = xo + sideA / 2
+	// ycr = yo - sideA * 3^0.5 / 6
+	v_ptHex[2].x = ptCoord.x + usSideA / 2;
+	v_ptHex[2].y = ptCoord.y - usSqrt3SideA / 6;
+
+	// next point = d
+	// xa = xo
+	// ya = yo - sideA * 3^0.5 / 3
+	v_ptHex[3].x = ptCoord.x;
+	v_ptHex[3].y = ptCoord.y - usSqrt3SideA / 3;
+
+	// next point = cl
+	// xcr = xo - sideA / 2
+	// ycr = yo - sideA * 3^0.5 / 6
+	v_ptHex[4].x = ptCoord.x - usSideA / 2;
+	v_ptHex[4].y = ptCoord.y - usSqrt3SideA / 6;
+
+	// next point = bl
+	// xbr = xo - sideA / 2
+	// ybr = yo + sideA * 3^0.5 / 6
+	v_ptHex[5].x = ptCoord.x - usSideA / 2;
+	v_ptHex[5].y = ptCoord.y + usSqrt3SideA / 6;
+
+	// draw figure
+	Polygon(hdc, v_ptHex, 6);
 }
 
 

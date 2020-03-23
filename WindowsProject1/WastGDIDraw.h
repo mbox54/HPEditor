@@ -48,6 +48,9 @@ public:
 	// Paint current view screen
 	void Draw();
 
+	// support
+	void Hex(HDC hdc, POINT ptCoord, WORD usSideA);
+
 
 private:
 	// > properties
