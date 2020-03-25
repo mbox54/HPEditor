@@ -24,36 +24,29 @@ class WastGDIDraw
 	static constexpr WORD CANVAS_LAYOUTS_DEFAULT = 10;
 	static constexpr WORD CANVAS_WIDTH_DEFAULT = 1200;
 	static constexpr WORD CANVAS_HEIGTH_DEFAULT = 1000;
+	static constexpr WORD FIGURE_HEX_SIDEA = 80;
+
 
 public:	
 
 	// constructor
 	WastGDIDraw();
 	WastGDIDraw(HWND hWnd);
-	//HGrid(CStaticHP* p_CanvasHP);
-
 	~WastGDIDraw();
 
-	// properties
+	// *** properties ***
 
-	// methods
+	// *** methods ***
 	void Init(HWND hWnd);
-
-	//void SetCanvas(CStaticHP* p_CanvasHP);
-	//void SetGridGraphInfo();
-
-	// test
-	void DrawPixels();
 
 	// Paint current view screen
 	void Draw();
 
-	// support
-	void Hex(HDC hdc, POINT ptCoord, WORD usSideA);
 
 
 private:
-	// > properties
+
+	// *** properties ***
 	// pointer to the canvas window
 	HWND m_hWnd;
 
@@ -62,6 +55,27 @@ private:
 	RECT m_layouts;
 	POINT m_pictureSize;
 
+	// picture params
+	WORD m_usFigureHexSideA;
+	POINT m_pictureGridSize;
+
+	// temp logic memstruct
+	Hhexlogic <POINT> mv_HexPts;
+
+	// *** methods ***
+	void Defaults(void);
+	void SetupGridLogic(void);
+
+
+	//void SetCanvas(CStaticHP* p_CanvasHP);
+	//void SetGridGraphInfo();
+
+	// test
+	void DrawPixels();
+
+	// support
+	void GridCenterPoints(HDC hdc);
+	void Hex(HDC hdc, POINT ptCoord, WORD usSideA);
 	//// > > Graphics
 	//// Canvas sourse
 	//CStaticHP* p_CanvasHP;

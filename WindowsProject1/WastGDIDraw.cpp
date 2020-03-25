@@ -23,13 +23,7 @@ WastGDIDraw::WastGDIDraw()
 	m_canvasRect.right = 0;
 	m_canvasRect.top = 0;
 
-	m_layouts.left = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.right = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.top = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.bottom = CANVAS_LAYOUTS_DEFAULT;
-
-	m_pictureSize.x = CANVAS_WIDTH_DEFAULT;
-	m_pictureSize.y = CANVAS_HEIGTH_DEFAULT;
+	Defaults();
 }
 
 
@@ -40,13 +34,8 @@ WastGDIDraw::WastGDIDraw(HWND hWnd)
 
 	GetClientRect(m_hWnd, &m_canvasRect);
 
-	m_layouts.left = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.right = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.top = CANVAS_LAYOUTS_DEFAULT;
-	m_layouts.bottom = CANVAS_LAYOUTS_DEFAULT;
-
-	m_pictureSize.x = CANVAS_WIDTH_DEFAULT;
-	m_pictureSize.y = CANVAS_HEIGTH_DEFAULT;
+	Defaults();
+	SetupGridLogic();
 }
 
 
@@ -56,12 +45,71 @@ WastGDIDraw::~WastGDIDraw()
 }
 
 
+void WastGDIDraw::Defaults(void)
+{
+	m_layouts.left = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.right = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.top = CANVAS_LAYOUTS_DEFAULT;
+	m_layouts.bottom = CANVAS_LAYOUTS_DEFAULT;
+
+	m_pictureSize.x = CANVAS_WIDTH_DEFAULT;
+	m_pictureSize.y = CANVAS_HEIGTH_DEFAULT;
+
+	m_usFigureHexSideA = FIGURE_HEX_SIDEA;
+
+	m_pictureGridSize.x = 0;
+	m_pictureGridSize.y = 0;
+}
+
+
+void WastGDIDraw::SetupGridLogic(void)
+{
+	// init grid logic
+	// define coord centers
+	WORD usHexColCount = m_pictureSize.x / m_usFigureHexSideA;
+	float fh = m_usFigureHexSideA * sqrt(3) / 2;
+	WORD usH = (WORD)fh;
+	if (usH - fh > 0.5)
+	{
+		usH++;
+	}
+
+	float fHeigth = m_pictureSize.y / fh;
+	WORD usHexRowCount = (WORD)fHeigth;
+	if (usHexRowCount - fHeigth > 0.5)
+	{
+		usHexRowCount++;
+	}
+
+	// create logic
+	m_pictureGridSize.x = usHexColCount;
+	m_pictureGridSize.y = usHexRowCount;
+
+	mv_HexPts.NodeRect_PlaceNewGrid(m_pictureGridSize);
+
+	// fill coords
+	float fCoord;
+	for (WORD y = 0; y < usHexRowCount; y++)
+	{
+		for (WORD x = 0; x < usHexColCount; x++)
+		{
+			mv_HexPts.mv_grid[y][x].x = m_usFigureHexSideA * x + (m_usFigureHexSideA / 2) * (y % 2);
+
+			fCoord = y * fh;
+			mv_HexPts.mv_grid[y][x].y = (WORD)fCoord;
+		}
+	}
+}
+
+
 void WastGDIDraw::Init(HWND hWnd)
 {
 	// set up window values
 	m_hWnd = hWnd;
 
 	GetClientRect(m_hWnd, &m_canvasRect);
+
+	SetupGridLogic();
 }
 
 
@@ -120,55 +168,33 @@ void WastGDIDraw::Draw()
 	// NOTE:
 	// Hex based on equilateral triangle. 
 	// - equilateral triangle: side = a, higth = h = a * 3^0.5 / 2
-
-	// define coord centers
-	WORD usSideA = 60;
-	WORD usHexColCount = m_pictureSize.x / usSideA;
-	float fh = usSideA * sqrt(3) / 2;
-	float fHeigth = m_pictureSize.y / fh;
-	WORD usHexRowCount = (WORD)fHeigth;
-
-	// create logic
-
-
-	Hhexlogic <POINT> v_HexPts;
-	POINT hexgridSize{ usHexColCount, usHexRowCount };
-	v_HexPts.NodeRect_PlaceNewGrid(hexgridSize);
-	
-	// fill coords
-	float fCoord;
-	for (WORD y = 0; y < usHexRowCount; y++)
-	{
-		for (WORD x = 0; x < usHexColCount; x++)
-		{
-			v_HexPts.mv_grid[y][x].x = usSideA * x + (usSideA / 2) * (y % 2);
-
-			fCoord = y * fh;			
-			v_HexPts.mv_grid[y][x].y = (WORD)fCoord;
-		}
-	}
-
-	// draw points
-	for (WORD y = 0; y < usHexRowCount; y++)
-	{
-		for (WORD x = 0; x < usHexColCount; x++)
-		{
-			// draw
-			SetPixel(hdc, v_HexPts.mv_grid[y][x].x, v_HexPts.mv_grid[y][x].y, RGB(0, 0, 255));
-		}
-	}
+	GridCenterPoints(hdc);
 
 	// draw hex
-	Hex(hdc, v_HexPts.mv_grid[4][5], usSideA);
-	Hex(hdc, v_HexPts.mv_grid[4][6], usSideA);
-	Hex(hdc, v_HexPts.mv_grid[5][5], usSideA);
-	Hex(hdc, v_HexPts.mv_grid[1][4], usSideA);
-	Hex(hdc, v_HexPts.mv_grid[8][6], usSideA);
-	Hex(hdc, v_HexPts.mv_grid[2][9], usSideA);
-	Hex(hdc, v_HexPts.mv_grid[9][11], usSideA);
+	Hex(hdc, mv_HexPts.mv_grid[4][5], m_usFigureHexSideA);
+	Hex(hdc, mv_HexPts.mv_grid[4][6], m_usFigureHexSideA);
+	Hex(hdc, mv_HexPts.mv_grid[5][5], m_usFigureHexSideA);
+	Hex(hdc, mv_HexPts.mv_grid[1][4], m_usFigureHexSideA);
+	Hex(hdc, mv_HexPts.mv_grid[8][6], m_usFigureHexSideA);
+	Hex(hdc, mv_HexPts.mv_grid[2][9], m_usFigureHexSideA);
+	Hex(hdc, mv_HexPts.mv_grid[9][11], m_usFigureHexSideA);
 
 	// # release resources
 	EndPaint(m_hWnd, &ps);
+}
+
+
+void WastGDIDraw::GridCenterPoints(HDC hdc)
+{
+	// draw points
+	for (WORD y = 0; y < m_pictureGridSize.y; y++)
+	{
+		for (WORD x = 0; x < m_pictureGridSize.x; x++)
+		{
+			// draw
+			SetPixel(hdc, mv_HexPts.mv_grid[y][x].x, mv_HexPts.mv_grid[y][x].y, RGB(0, 0, 255));
+		}
+	}
 }
 
 // FORMAT:
