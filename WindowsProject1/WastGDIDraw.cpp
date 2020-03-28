@@ -3,11 +3,23 @@
 
 
 ////////////////////////////////////////////////////////////
-// include
+// includes
 ////////////////////////////////////////////////////////////
 // precompile
 #include "project.h"
 #include "WastGDIDraw.h"
+
+
+////////////////////////////////////////////////////////////
+// consts
+////////////////////////////////////////////////////////////
+const struct st_PenStyle mc_stGridBackground =
+{
+	PS_SOLID,
+	4,
+	RGB(200, 200, 200)
+};
+
 
 
 ////////////////////////////////////////////////////////////
@@ -66,20 +78,15 @@ void WastGDIDraw::SetupGridLogic(void)
 {
 	// init grid logic
 	// define coord centers
-	WORD usHexColCount = m_pictureSize.x / m_usFigureHexSideA;
+
+	// NOTE:
+	// because Col position relate on "+(m_usFigureHexSideA / 2) * (y % 2)"
+	// need to decrement ColCount 
+	WORD usHexColCount = m_pictureSize.x / m_usFigureHexSideA - 1;
 	float fh = m_usFigureHexSideA * sqrt(3) / 2;
 	WORD usH = (WORD)fh;
-	if (usH - fh > 0.5)
-	{
-		usH++;
-	}
 
-	float fHeigth = m_pictureSize.y / fh;
-	WORD usHexRowCount = (WORD)fHeigth;
-	if (usHexRowCount - fHeigth > 0.5)
-	{
-		usHexRowCount++;
-	}
+	WORD usHexRowCount = m_pictureSize.y / usH;
 
 	// create logic
 	m_pictureGridSize.x = usHexColCount;
@@ -88,15 +95,14 @@ void WastGDIDraw::SetupGridLogic(void)
 	mv_HexPts.NodeRect_PlaceNewGrid(m_pictureGridSize);
 
 	// fill coords
-	float fCoord;
 	for (WORD y = 0; y < usHexRowCount; y++)
 	{
+		// NOTE:
+		// 'x' and 'y' coord need to be shifted by 0.5 hex-size because (x, y) is centers of figure
 		for (WORD x = 0; x < usHexColCount; x++)
 		{
-			mv_HexPts.mv_grid[y][x].x = m_usFigureHexSideA * x + (m_usFigureHexSideA / 2) * (y % 2);
-
-			fCoord = y * fh;
-			mv_HexPts.mv_grid[y][x].y = (WORD)fCoord;
+			mv_HexPts.mv_grid[y][x].x = m_usFigureHexSideA * x + (m_usFigureHexSideA / 2) * (y % 2) + m_usFigureHexSideA / 2;
+			mv_HexPts.mv_grid[y][x].y = y * usH + usH * 2 / 3;
 		}
 	}
 }
@@ -135,6 +141,7 @@ void WastGDIDraw::DrawPixels()
 }
 
 
+
 void WastGDIDraw::Draw()
 {
 	// # init paint parameters
@@ -168,23 +175,17 @@ void WastGDIDraw::Draw()
 	// NOTE:
 	// Hex based on equilateral triangle. 
 	// - equilateral triangle: side = a, higth = h = a * 3^0.5 / 2
-	GridCenterPoints(hdc);
+	PaintGridCenterPoints(hdc);
 
-	// draw hex
-	Hex(hdc, mv_HexPts.mv_grid[4][5], m_usFigureHexSideA);
-	Hex(hdc, mv_HexPts.mv_grid[4][6], m_usFigureHexSideA);
-	Hex(hdc, mv_HexPts.mv_grid[5][5], m_usFigureHexSideA);
-	Hex(hdc, mv_HexPts.mv_grid[1][4], m_usFigureHexSideA);
-	Hex(hdc, mv_HexPts.mv_grid[8][6], m_usFigureHexSideA);
-	Hex(hdc, mv_HexPts.mv_grid[2][9], m_usFigureHexSideA);
-	Hex(hdc, mv_HexPts.mv_grid[9][11], m_usFigureHexSideA);
+	// paint background grid
+	PaintGridBackground(hdc);
 
 	// # release resources
 	EndPaint(m_hWnd, &ps);
 }
 
 
-void WastGDIDraw::GridCenterPoints(HDC hdc)
+void WastGDIDraw::PaintGridCenterPoints(HDC hdc)
 {
 	// draw points
 	for (WORD y = 0; y < m_pictureGridSize.y; y++)
@@ -197,13 +198,31 @@ void WastGDIDraw::GridCenterPoints(HDC hdc)
 	}
 }
 
+// background grid blueprint
+void WastGDIDraw::PaintGridBackground(HDC hdc)
+{
+	// define specific style
+	HPEN hPenDraw = CreatePen(mc_stGridBackground.iStyle, mc_stGridBackground.cWidth, mc_stGridBackground.color);
+
+	// draw hexes
+	for (WORD y = 0; y < m_pictureGridSize.y; y++)
+	{
+		for (WORD x = 0; x < m_pictureGridSize.x; x++)
+		{
+			// draw
+			PaintHex(hdc, mv_HexPts.mv_grid[y][x], m_usFigureHexSideA, hPenDraw);
+		}
+	}
+	
+}
+
 // FORMAT:
 // a		.....#..... 
 // bl, br	..#.....#..
 // cl, cr	..#.....#..
 // d		.....#.....
 // o - coord center
-void WastGDIDraw::Hex(HDC hdc, POINT ptCoord, WORD usSideA)
+void WastGDIDraw::PaintHex(HDC hdc, POINT ptCoord, WORD usSideA, HPEN hPen)
 {
 	// accelerate float operations
 	float fSqrt3SideA = usSideA * sqrt(3);
@@ -213,11 +232,12 @@ void WastGDIDraw::Hex(HDC hdc, POINT ptCoord, WORD usSideA)
 		usSqrt3SideA++;
 	}
 
-	// coords store vector
-	POINT v_ptHex[6];
-
+	// # define points
 	// NOTE: 
 	// not actually optimized, direct calculation approach
+
+	// coords store vector
+	POINT v_ptHex[6];
 
 	// init point = a
 	// xa = xo
@@ -255,86 +275,10 @@ void WastGDIDraw::Hex(HDC hdc, POINT ptCoord, WORD usSideA)
 	v_ptHex[5].x = ptCoord.x - usSideA / 2;
 	v_ptHex[5].y = ptCoord.y + usSqrt3SideA / 6;
 
-	// draw figure
+	// # draw figure
+	// apply style
+	SelectObject(hdc, hPen);
+
+	// draw
 	Polygon(hdc, v_ptHex, 6);
 }
-
-
-/*
-// TODO:
-// transfer to this class
-
-// Prepare Information for Grid -> Graphic Picture Controller
-void CGridHP::FormGraphInfo()
-{
-	// NOTE: use GraphTrasm struc DataType
-
-	// localize Grid size
-	POINT grph_Size = this->m_gridSize;
-
-	// construct Graph Grid-Net Info
-	POINT CoordGrid;
-
-	for (WORD uiCoorX = 0; uiCoorX < grph_Size.x; uiCoorX++)
-	{
-		// allocate memory: Vector for Row /in NodeGraphInfo struc container
-		this->p_GridGraphInfo->push_back(std::vector<stHPNodeGraphInfo>());
-
-		// Fill Cols
-		for (WORD uiCoorY = 0; uiCoorY < grph_Size.y; uiCoorY++)
-		{
-			// define Coord to set
-			CoordGrid.x = uiCoorX;
-			CoordGrid.y = uiCoorY;
-
-			// create NodeGraphInfo instance
-			stHPNodeGraphInfo HPNodeGraphInfo;
-
-			// Form Node Info-Value for Graph OPs
-			BYTE ucNodeValue;
-			this->v_Nodes[uiCoorX][uiCoorY].FormGraphInfo(&ucNodeValue);
-			HPNodeGraphInfo.Value = ucNodeValue;
-
-
-			// allocate memory: NodeGraphInfo in 2x Cell /in NodeGraphInfo struc Vector container
-			// fill with Value
-			this->p_GridGraphInfo->at(uiCoorX).push_back(HPNodeGraphInfo);
-		}
-	}//for (WORD uiCoorX / WORD uiCoorX)
-
-}
-
-// Paint Grid on Graphic Control
-// NOTE: use Canvas vars for PROC Graph parameters, TRASM to Paint
-void CGridHP::PaintGrid()
-{
-	// > Define Grid_Net Set-of-Nodes
-	// forming Node Graph Info
-	this->FormGraphInfo();
-
-	// > Call subordinate: Paint PROC
-	this->p_CanvasHP->PaintGrid();
-}
-
-// Set control /Canvas/
-void CGridHP::SetCanvas(CStaticHP * p_CanvasHP)
-{
-	// Set Canvas source
-	this->p_CanvasHP = p_CanvasHP;
-
-	// Set Graph Info source from Canvas
-	SetGridGraphInfo();
-}
-
-// Set struc /Values: size, Nodes/
-void CGridHP::SetGridGraphInfo()
-{
-	// set Pointer /v_GridGraphInfo/ to Variable MemAddr [INPUT]
-	this->p_GridGraphInfo = &this->p_CanvasHP->v_GridGraphInfo;
-
-	// set Pointer /GridSize/ to Variable MemAddr [OUTPUT]
-	this->p_CanvasHP->p_gridSize = &this->m_gridSize;
-
-}
-
-*/

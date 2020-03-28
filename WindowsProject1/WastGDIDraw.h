@@ -17,6 +17,17 @@
 
 
 ////////////////////////////////////////////////////////////
+// typedefs
+////////////////////////////////////////////////////////////
+struct st_PenStyle
+{
+	int iStyle;
+	int cWidth;
+	COLORREF color;
+};
+
+
+////////////////////////////////////////////////////////////
 // class WastGDIDraw
 ////////////////////////////////////////////////////////////
 class WastGDIDraw
@@ -66,16 +77,19 @@ private:
 	void Defaults(void);
 	void SetupGridLogic(void);
 
-
 	//void SetCanvas(CStaticHP* p_CanvasHP);
 	//void SetGridGraphInfo();
 
 	// test
 	void DrawPixels();
 
-	// support
-	void GridCenterPoints(HDC hdc);
-	void Hex(HDC hdc, POINT ptCoord, WORD usSideA);
+	// figures composite
+	void PaintGridCenterPoints(HDC hdc);
+	void PaintGridBackground(HDC hdc);
+		
+
+	// figures primitives	
+	void PaintHex(HDC hdc, POINT ptCoord, WORD usSideA, HPEN hPen);
 	//// > > Graphics
 	//// Canvas sourse
 	//CStaticHP* p_CanvasHP;
