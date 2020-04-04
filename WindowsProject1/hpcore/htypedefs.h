@@ -17,7 +17,7 @@
 // TypeDef
 //////////////////////////////////////////////////////////////////////
 
-#define MAX_INI_FILEPATH				64
+#define MAX_INI_FILEPATH				128
 
 // init
 struct stHPFileGlobals

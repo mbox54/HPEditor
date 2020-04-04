@@ -245,94 +245,93 @@ void HGrid::Init()
 
 ////////////////////////////////////////////////////////////
 // FILE XML OPs
-//
-//void HGrid::Save()
-//{
-//	// # Form Document
-//	tinyxml2::XMLDocument WDocument;
-//
-//	// # Form XML Header
-//	char * str_XMLSpec = (char*)"xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
-//	tinyxml2::XMLDeclaration* WDeclaration = WDocument.NewDeclaration((char const*)str_XMLSpec);
-//	WDocument.LinkEndChild(WDeclaration);
-//
-//	tinyxml2::XMLComment* CmntDeclaration = WDocument.NewComment("WAST Grid file structure");
-//	WDocument.LinkEndChild(CmntDeclaration);
-//
-//	// # Form Wast root element
-//	tinyxml2::XMLElement* El_Root = WDocument.NewElement("WAST");
-//	WDocument.LinkEndChild(El_Root);
-//
-//	tinyxml2::XMLElement* WastPart = WDocument.NewElement("Part");
-//	WastPart->SetText("GRID");
-//	El_Root->InsertEndChild(WastPart);
-//
-//	// # Form Title Part
-//	tinyxml2::XMLComment* CmntTitle = WDocument.NewComment("Part: Title");
-//	El_Root->InsertEndChild(CmntTitle);
-//
-//	tinyxml2::XMLElement* El_Title = WDocument.NewElement("TITLE");
-//	El_Root->InsertEndChild(El_Title);
-//
-//	// > Title Content
-//	// Description
-//	tinyxml2::XMLElement* El_Tit_Desc = WDocument.NewElement("Descr");
-//	El_Tit_Desc->SetText("Wast File, contained Grid structure filled with data");
-//	El_Title->InsertEndChild(El_Tit_Desc);
-//
-//	// Date
-//	tinyxml2::XMLElement* El_Tit_Date = WDocument.NewElement("Date");
-//	El_Tit_Date->SetText("Save PROC Date: 141117 10.00");
-//	El_Title->InsertEndChild(El_Tit_Date);
-//
-//	// Node grid size
-//	tinyxml2::XMLElement* El_Tit_Nodes = WDocument.NewElement("Nodes");
-//	El_Title->InsertEndChild(El_Tit_Nodes);
-//
-//	tinyxml2::XMLElement* El_Tit_Nodes_X = WDocument.NewElement("X");
-//	El_Tit_Nodes_X->SetText(m_gridSize.x);
-//	El_Tit_Nodes->InsertEndChild(El_Tit_Nodes_X);
-//
-//	tinyxml2::XMLElement* El_Tit_Nodes_Y = WDocument.NewElement("Y");
-//	El_Tit_Nodes_Y->SetText(m_gridSize.y);
-//	El_Tit_Nodes->InsertEndChild(El_Tit_Nodes_Y);
-//
-//
-//	// # Form Body
-//	tinyxml2::XMLComment* CmntBody = WDocument.NewComment("Part: Body");
-//	El_Root->InsertEndChild(CmntBody);
-//
-//	tinyxml2::XMLElement* El_Body = WDocument.NewElement("BODY");
-//	El_Root->InsertEndChild(El_Body);
-//
-//	// # Body Content
-//	// Node
-//	for (BYTE ky = 0; ky < m_gridSize.y; ky++)
-//	{
-//		for (BYTE kx = 0; kx < m_gridSize.x; kx++)
-//		{
-//			tinyxml2::XMLElement* El_Node = WDocument.NewElement("Node");
-//			El_Node->SetAttribute("Y", ky);
-//			El_Node->SetAttribute("X", kx);
-//			El_Node->SetText(100);
-//			El_Body->InsertEndChild(El_Node);
-//		}
-//		
-//	}
-//
-//	// # Save Document
-//	char strFileName[128];
-//	strcpy(strFileName, m_stGlobals.cDirectoryPath);
-//	strcat(strFileName, "\\");
-//	strcat(strFileName, m_strWastName);
-//
-//	// Create Node directory
-//	CreateDirectory((LPCWSTR)strFileName, NULL);
-//	
-//	strcat(strFileName, "\\Grid.xml");
-//
-//	WDocument.SaveFile(strFileName);
-//}
+
+void HGrid::Save()
+{
+	// # Form Document
+	tinyxml2::XMLDocument WDocument;
+
+	// # Form XML Header
+	char * str_XMLSpec = (char*)"xml version=\"1.0\" encoding=\"windows - 1251\" standalone=\"yes\"";
+	tinyxml2::XMLDeclaration* WDeclaration = WDocument.NewDeclaration((char const*)str_XMLSpec);
+	WDocument.LinkEndChild(WDeclaration);
+
+	tinyxml2::XMLComment* CmntDeclaration = WDocument.NewComment("WAST Grid file structure");
+	WDocument.LinkEndChild(CmntDeclaration);
+
+	// # Form Wast root element
+	tinyxml2::XMLElement* El_Root = WDocument.NewElement("WAST");
+	WDocument.LinkEndChild(El_Root);
+
+	tinyxml2::XMLElement* WastPart = WDocument.NewElement("Part");
+	WastPart->SetText("GRID");
+	El_Root->InsertEndChild(WastPart);
+
+	// # Form Title Part
+	tinyxml2::XMLComment* CmntTitle = WDocument.NewComment("Part: Title");
+	El_Root->InsertEndChild(CmntTitle);
+
+	tinyxml2::XMLElement* El_Title = WDocument.NewElement("TITLE");
+	El_Root->InsertEndChild(El_Title);
+
+	// > Title Content
+	// Description
+	tinyxml2::XMLElement* El_Tit_Desc = WDocument.NewElement("Descr");
+	El_Tit_Desc->SetText("Wast File, contained Grid structure filled with data");
+	El_Title->InsertEndChild(El_Tit_Desc);
+
+	// Date
+	tinyxml2::XMLElement* El_Tit_Date = WDocument.NewElement("Date");
+	El_Tit_Date->SetText("Save PROC Date: 141117 10.00");
+	El_Title->InsertEndChild(El_Tit_Date);
+
+	// Node grid size
+	tinyxml2::XMLElement* El_Tit_Nodes = WDocument.NewElement("Nodes");
+	El_Title->InsertEndChild(El_Tit_Nodes);
+
+	tinyxml2::XMLElement* El_Tit_Nodes_X = WDocument.NewElement("X");
+	El_Tit_Nodes_X->SetText(m_gridSize.x);
+	El_Tit_Nodes->InsertEndChild(El_Tit_Nodes_X);
+
+	tinyxml2::XMLElement* El_Tit_Nodes_Y = WDocument.NewElement("Y");
+	El_Tit_Nodes_Y->SetText(m_gridSize.y);
+	El_Tit_Nodes->InsertEndChild(El_Tit_Nodes_Y);
+
+
+	// # Form Body
+	tinyxml2::XMLComment* CmntBody = WDocument.NewComment("Part: Body");
+	El_Root->InsertEndChild(CmntBody);
+
+	tinyxml2::XMLElement* El_Body = WDocument.NewElement("BODY");
+	El_Root->InsertEndChild(El_Body);
+
+	// # Body Content
+	// Node
+	for (BYTE ky = 0; ky < m_gridSize.y; ky++)
+	{
+		for (BYTE kx = 0; kx < m_gridSize.x; kx++)
+		{
+			tinyxml2::XMLElement* El_Node = WDocument.NewElement("Node");
+			El_Node->SetAttribute("Y", ky);
+			El_Node->SetAttribute("X", kx);
+			El_Node->SetText(kx * ky);
+			El_Body->InsertEndChild(El_Node);
+		}		
+	}
+
+	// # Save Document
+	char strFileName[128];
+	strcpy(strFileName, m_stGlobals.cDirectoryPath);
+	strcat(strFileName, "\\");
+	strcat(strFileName, m_strWastName);
+
+	// Create Node directory
+	CreateDirectory((LPCWSTR)strFileName, NULL);
+	
+	strcat(strFileName, "\\Grid.xml");
+
+	WDocument.SaveFile(strFileName);
+}
 //
 //
 //void HGrid::Load()
@@ -371,17 +370,6 @@ void HGrid::Init()
 //
 //}
 
-
-void HGrid::SaveGrid()
-{
-
-}
-
-
-void HGrid::LoadGrid()
-{
-
-}
 
 //////////////////////////////////////////////////////////////////////
 // Debug, Test section

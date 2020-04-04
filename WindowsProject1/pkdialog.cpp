@@ -308,8 +308,37 @@ BOOL PKDialog::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 	case WM_COMMAND:
+		// *** main OPs ***
+		// exit programm
 		if (wParam == IDCANCEL)
+		{
 			EndDialog(hDlg, 0);
+		}
+
+		// about dialog
+		if (wParam == IDABOUT)
+		{
+			
+		}
+
+		// *** file OPs ***
+		// new
+		if (wParam == IDC_BUTTON_FILE_NEW)
+		{
+			
+		}
+
+		// load
+		if (wParam == IDC_BUTTON_FILE_LOAD)
+		{
+			
+		}
+
+		// save
+		if (wParam == IDC_BUTTON_FILE_SAVE)
+		{
+			
+		}
 
 		//if (wParam == IDC_BUTTON1)
 		//{
@@ -346,6 +375,28 @@ BOOL PKDialog::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 	return 0;
+}
+
+
+void PKDialog::FileNew(void)
+{
+	// define name
+	//
+
+	// create new grid
+
+}
+
+
+void PKDialog::FileLoad(void)
+{
+
+}
+
+
+void PKDialog::FileSave(void)
+{
+
 }
 
 

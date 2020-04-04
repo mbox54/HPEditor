@@ -122,9 +122,6 @@ public:
 	PKDialog(HINSTANCE hInstance, int nResId, HWND hWndParent);
 	~PKDialog();
 
-	// service
-	void Init(HWND hDlg);
-
 	// show dialog, start message proc
 	void DoModal(void);
 
@@ -134,6 +131,7 @@ public:
 
 
 private:
+	// *** properties ***
 	// service
 	HINSTANCE	m_hInstance;
 	WORD		m_nResId;
@@ -149,20 +147,24 @@ private:
 	// ?
 	WNDPROC		m_hProcHandle;
 
+	// this handle, need for place CALLBACK proc as dialog method
+	static long m_lThis;
+	static HWND m_hWindow;
+
+	// *** methods ***
+	// init incorporated contols
+	void Init(HWND hDlg);
+
 	// message loop routine callback static prototype
 	static BOOL CALLBACK DlgProcStatic(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-//	static LRESULT CALLBACK EditProcStatic(HWND hEdit, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// dialog message loop routine
 	BOOL DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-//	LRESULT EditProc(HWND hEdit, UINT msg, WPARAM wParam, LPARAM lParam);
 
-
-protected:
-	// this handle, need for place CALLBACK proc as dialog method
-	static long m_lThis;
-
-	static HWND m_hWindow;
+	// file OPs
+	void FileNew(void);
+	void FileLoad(void);
+	void FileSave(void);
 	
 	
 };

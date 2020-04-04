@@ -10,18 +10,25 @@
 
 // interface file
 
-
 #pragma once
+
 
 ////////////////////////////////////////////////////////////
 // Includes
 ////////////////////////////////////////////////////////////
-// parent
+
+// parent grid structure
 #include "hhexlogic.h"
+
 // nodes
-#include "hplot.h"					
+#include "hplot.h"		
+
+// service /typedef /system ops
+#include "globals.h"
+
 // load/save xml file
 #include "../external/tinyxml2.h"
+
 // std vector container
 #include <vector>
 
@@ -65,8 +72,8 @@ public:
 	// Node OP
 
 	// File OPs
-	void SaveGrid();
-	void LoadGrid();
+	void Save();
+	void Load();
 
 	// Test
 	void DebugBillet01(void);

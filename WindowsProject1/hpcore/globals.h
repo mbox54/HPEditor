@@ -50,3 +50,4 @@ extern char m_strWastName[32];
 // functions
 BYTE GetStrTag(char * strParse, char * strOutput, char chOpenSymbol, char chCloseSymbol);
 BYTE Read_config(stHPFileGlobals * var_stGlobals);
+void Config_Init(void);

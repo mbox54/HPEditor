@@ -190,7 +190,7 @@ BYTE GetLevel0(char* strParse, char* strOutput)
 	}
 }
 
-// read config file with globak parameters
+// read config file with global parameters
 BYTE Read_config(stHPFileGlobals* var_stGlobals)
 {
 	// > Open File (config)
@@ -328,4 +328,10 @@ BYTE Read_config(stHPFileGlobals* var_stGlobals)
 			}
 		}//else/if (fgets(str_buf, MAX_STR_BUF, fs) == "NULL")
 	}//while (act)
+}
+
+
+void Config_Init(void)
+{
+	BYTE ucResult = Read_config(&m_stGlobals);
 }
