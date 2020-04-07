@@ -18,12 +18,16 @@
 //////////////////////////////////////////////////////////////////////
 
 #define MAX_INI_FILEPATH				128
+#define MAX_FILENAME					32
 
 // init
 struct stHPFileGlobals
 {
+	// file dir path
 	char cDirectoryPath[MAX_INI_FILEPATH];
 
+	// this Universe name
+	char strWastName[MAX_FILENAME];
 };
 
 

@@ -21,9 +21,6 @@
 // module globals
 struct stHPFileGlobals m_stGlobals;
 
-// This Universe Name
-char m_strWastName[32];
-
 
 //////////////////////////////////////////////////////////////////////
 // service PROCs
@@ -334,4 +331,7 @@ BYTE Read_config(stHPFileGlobals* var_stGlobals)
 void Config_Init(void)
 {
 	BYTE ucResult = Read_config(&m_stGlobals);
+
+	// [m_strWastName]
+	strcpy(m_stGlobals.strWastName, "unnamed");
 }

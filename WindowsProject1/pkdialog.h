@@ -9,6 +9,7 @@
 // include
 ////////////////////////////////////////////////////////////
 #include "project.h"
+#include "hpcore/hgrid.h"
 #include "WastGDIDraw.h"
 
 
@@ -150,6 +151,9 @@ private:
 	// this handle, need for place CALLBACK proc as dialog method
 	static long m_lThis;
 	static HWND m_hWindow;
+
+	// work object
+	HGrid m_HPGrid;
 
 	// *** methods ***
 	// init incorporated contols

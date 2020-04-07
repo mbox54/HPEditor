@@ -7,6 +7,7 @@
 // * WastGDIDraw use GDI as graphics
 // date: 09.02.2020
 
+// pragma once
 #ifndef WASTGDIDRAW_H
 
 ////////////////////////////////////////////////////////////
@@ -17,25 +18,31 @@
 
 
 ////////////////////////////////////////////////////////////
-// typedefs
-////////////////////////////////////////////////////////////
-struct st_PenStyle
-{
-	int iStyle;
-	int cWidth;
-	COLORREF color;
-};
-
-
-////////////////////////////////////////////////////////////
 // class WastGDIDraw
 ////////////////////////////////////////////////////////////
 class WastGDIDraw
 {
+	// defines
 	static constexpr WORD CANVAS_LAYOUTS_DEFAULT = 10;
 	static constexpr WORD CANVAS_WIDTH_DEFAULT = 1200;
 	static constexpr WORD CANVAS_HEIGTH_DEFAULT = 1000;
 	static constexpr WORD FIGURE_HEX_SIDEA = 80;
+
+	// typedefs
+	struct st_PenStyle
+	{
+		int iStyle;
+		int cWidth;
+		COLORREF color;
+	};
+
+	// consts
+	const struct st_PenStyle mc_stGridBackground =
+	{
+		PS_SOLID,
+		4,
+		RGB(200, 200, 200)
+	};
 
 
 public:	

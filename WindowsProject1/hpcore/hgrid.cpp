@@ -47,13 +47,12 @@
 
 
 // Construct & Fill v_Nodes
-void HGrid::Init()
+void HGrid::Init(void)
 {
 	// ## Default Values
 	// NOTE: need when load op failed
 	// Init properties	
-	// [m_strWastName]
-	strcpy(m_strWastName, "unnamed");
+
 }
 
 
@@ -323,7 +322,7 @@ void HGrid::Save()
 	char strFileName[128];
 	strcpy(strFileName, m_stGlobals.cDirectoryPath);
 	strcat(strFileName, "\\");
-	strcat(strFileName, m_strWastName);
+	strcat(strFileName, m_stGlobals.strWastName);
 
 	// Create Node directory
 	CreateDirectory((LPCWSTR)strFileName, NULL);

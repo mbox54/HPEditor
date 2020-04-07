@@ -46,7 +46,7 @@ public:
 	~Hhexlogic();
 
 
-	// * * * properties * * *
+	// *** properties ***
 	// > > Node Container
 	// dementions size
 	POINT m_gridSize;
@@ -60,9 +60,6 @@ public:
 	
 	// service buffer for copy-paste
 	std::vector< T > mv_tempBuf;
-
-	// * * * methods * * *
-	void Init();
 
 	// nodes / base
 	void NodeRowAdd();
@@ -100,6 +97,12 @@ public:
 
 private:
 
+	// *** properties ***
+	
+	// *** methods ***
+	void Defaults(void);
+	void Init();
+
 };
 
 
@@ -128,14 +131,24 @@ private:
 template<class T>
 Hhexlogic<T>::Hhexlogic()
 {
-	// defaults
+	// volatile init
+	Defaults();
+
+	// set empty grid
 	Init();
 }
 
 template<class T>
 Hhexlogic<T>::Hhexlogic(POINT gridSize)
 {
+	// volatile init
+	Defaults();
+
+	// define grid size
 	m_gridSize = gridSize;
+
+	// place nodes
+	//
 }
 
 template<class T>
@@ -145,12 +158,9 @@ Hhexlogic<T>::~Hhexlogic()
 }
 
 template<class T>
-void Hhexlogic<T>::Init()
+inline void Hhexlogic<T>::Defaults(void)
 {
 	// defaults
-	m_gridSize.x = 0;
-	m_gridSize.y = 0;
-
 	mc_gridMaxSize.y = MAX_SIZE_ROWS_DEFAULT;
 	mc_gridMaxSize.x = MAX_SIZE_COLS_DEFAULT;
 
@@ -159,6 +169,14 @@ void Hhexlogic<T>::Init()
 		// no incident
 		mv_incidence[k] = 0;
 	}
+}
+
+template<class T>
+void Hhexlogic<T>::Init()
+{
+	// empty grid defaults
+	m_gridSize.x = 0;
+	m_gridSize.y = 0;
 }
 
 // Node operations

@@ -180,7 +180,7 @@ void HNode::Save()
 	char strFileName[128];
 	strcpy(strFileName, m_stGlobals.cDirectoryPath);
 	strcat(strFileName, "\\");
-	strcat(strFileName, m_strWastName);
+	strcat(strFileName, m_stGlobals.strWastName);
 	strcat(strFileName, "\\Node");
 	
 	strcat(strFileName, "Y");
@@ -212,7 +212,7 @@ void HNode::Load()
 	char strFileName[128];
 	strcpy(strFileName, m_stGlobals.cDirectoryPath);
 	strcat(strFileName, "\\");
-	strcat(strFileName, m_strWastName);
+	strcat(strFileName, m_stGlobals.strWastName);
 	strcat(strFileName, "\\Node");
 
 	strcat(strFileName, "Y");

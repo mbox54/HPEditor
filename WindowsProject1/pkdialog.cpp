@@ -289,6 +289,10 @@ void PKDialog::Init(HWND hDlg)
 
 	// Picture-'Canvas'
 	m_Canvas.Init(IDC_STATIC_CANVAS, hDlg, &m_hCanvas_ProcHandle);
+
+	// *** work object ***
+	// none here
+
 }
 
 

@@ -41,10 +41,6 @@
 #define SIDESIZE 12				// NOTE: HexGrid Size: x12 = dozens
 
 
-extern struct stHPFileGlobals m_stGlobals;
-
-
-
 // -------------------------------------------------------------------
 // class HNode
 // -------------------------------------------------------------------
