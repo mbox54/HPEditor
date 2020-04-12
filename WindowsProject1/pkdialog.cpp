@@ -384,10 +384,17 @@ BOOL PKDialog::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void PKDialog::FileNew(void)
 {
+	// reset previous grid state
+	//
+
 	// define name
 	//
 
 	// create new grid
+	// FORMAT:
+	// by default create grid with rows=1, cols=1
+	m_HPGrid.NodeRect_RowAdd();
+	m_HPGrid.NodeRect_ColAdd();
 
 }
 

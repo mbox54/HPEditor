@@ -78,8 +78,7 @@ public:
 
 	void NodeRect_SetSize(POINT gridSize);
 	void NodeRect_UpdateGrid();
-	void NodeRect_ReplaceGrid(POINT gridSize);
-	void NodeRect_PlaceNewGrid(POINT gridSize);
+	void NodeRect_ResizeGrid(POINT gridSize);
 
 	// node / file
 	void LoadNode(POINT gridPos);
@@ -336,7 +335,9 @@ void Hhexlogic<T>::NodeRowPaste(WORD usIndex)
 
 		// add row
 		// allocate memory: insert element in specific position
-		this->mv_grid.insert(usIndex, T);
+		std::vector<T>::iterator itIndex;
+		itIndex = mv_grid.begin() + usIndex;
+		this->mv_grid.insert(itIndex, T);
 
 		// inc Row count
 		m_gridSize.y++;
@@ -361,7 +362,9 @@ void Hhexlogic<T>::NodeColPaste(WORD usRowIndex, WORD usIndex)
 
 		// add col
 		// allocate memory: insert element in specific position in specific row
-		this->mv_grid[usRowIndex].insert(usIndex, T);
+		std::vector<T>::iterator itIndex;
+		itIndex = mv_grid.begin() + usIndex;
+		this->mv_grid[usRowIndex].insert(itIndex, T);
 
 		// inc Col count
 		// NOTE: not applied here now
@@ -385,7 +388,9 @@ void Hhexlogic<T>::NodeRowCut(WORD usIndex)
 
 		// cut row
 		// delete from position, move elements to empty pos
-		this->mv_grid.erase(usIndex);
+		std::vector<T>::iterator itIndex;
+		itIndex = mv_grid.begin() + usIndex;
+		this->mv_grid.erase(itIndex);
 
 		// inc Row count
 		m_gridSize.y--;
@@ -410,7 +415,9 @@ void Hhexlogic<T>::NodeColCut(WORD usRowIndex, WORD usIndex)
 
 		// cut col
 		// allocate memory: just pop back element in specific row
-		this->mv_grid[usRowIndex].erase(usIndex);
+		std::vector<T>::iterator itIndex;
+		itIndex = mv_grid.begin() + usIndex;
+		this->mv_grid[usRowIndex].erase(itIndex);
 
 		// dec Col count
 		// NOTE: not applied here now
@@ -556,49 +563,58 @@ void Hhexlogic<T>::NodeRect_UpdateGrid()
 	}
 }
 
-// enlarge grid
-// TODO: check direction of editing: enlarge/shorten
-template<class T>
-void Hhexlogic<T>::NodeRect_ReplaceGrid(POINT gridSize)
-{
-	// set new size
-	NodeRect_SetSize(gridSize);
 
-	// correct grid
-	NodeRect_UpdateGrid();
-}
-
-// place from zero-sized
 template<class T>
-void Hhexlogic<T>::NodeRect_PlaceNewGrid(POINT gridSize)
+void Hhexlogic<T>::NodeRect_ResizeGrid(POINT gridSize)
 {
 	// safe check
 	// NOTE: there must be at least 1 Row with 1 Col.
-	if ((gridSize.x >= 1) && (gridSize.y >= 1))
-	{
-		// [VALID]
-
-		// place first Row
-		NodeRect_RowAdd();
-
-		// place row with Cols
-		for (WORD k = 0; k < gridSize.x; k++)
-		{
-			NodeRect_ColAdd();
-		}
-
-		// place Rows
-		for (WORD k = 0; k < gridSize.y - 1; k++)
-		{
-			NodeRect_RowAdd();
-		}
-	}
-	else
+	if ((gridSize.x < 1) || (gridSize.y < 1))
 	{
 		// [INVALID]
 
 		return;
 	}
+
+	// check Rows details of update
+	if (gridSize.y == m_gridSize.y)
+	{
+		// [EQUAL]
+
+		// no Row update
+	}
+	else
+	{
+		// [DIFFERENT]
+
+		// set new Row count
+		m_gridSize.y = gridSize.y;
+
+		// resize Rows
+		mv_grid[y].resize(m_gridSize.y);
+	}
+
+	// check Cols details of update
+	if (gridSize.x == m_gridSize.x)
+	{
+		// [EQUAL]
+
+		// no Col update
+	}
+	else
+	{
+		// [DIFFERENT]
+
+		// set new Col count
+		m_gridSize.x = gridSize.x;
+
+		// resize Cols
+		for (WORD k = 0; k < m_gridSize.x; k++)
+		{
+			mv_grid[y].resize();
+		}
+	}
+
 }
 
 

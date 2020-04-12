@@ -267,7 +267,7 @@ void HGrid::Save()
 	El_Root->InsertEndChild(WastPart);
 
 	// # Form Title Part
-	tinyxml2::XMLComment* CmntTitle = WDocument.NewComment("Part: Title");
+	tinyxml2::XMLComment* CmntTitle = WDocument.NewComment("********** Part: Title **********");
 	El_Root->InsertEndChild(CmntTitle);
 
 	tinyxml2::XMLElement* El_Title = WDocument.NewElement("TITLE");
@@ -281,11 +281,11 @@ void HGrid::Save()
 
 	// Date
 	tinyxml2::XMLElement* El_Tit_Date = WDocument.NewElement("Date");
-	El_Tit_Date->SetText("Save PROC Date: 141117 10.00");
+	El_Tit_Date->SetText("Save PROC Date: 12.04.2020 16:00");
 	El_Title->InsertEndChild(El_Tit_Date);
 
 	// Node grid size
-	tinyxml2::XMLElement* El_Tit_Nodes = WDocument.NewElement("Nodes");
+	tinyxml2::XMLElement* El_Tit_Nodes = WDocument.NewElement("Grid size: ");
 	El_Title->InsertEndChild(El_Tit_Nodes);
 
 	tinyxml2::XMLElement* El_Tit_Nodes_X = WDocument.NewElement("X");
@@ -298,7 +298,7 @@ void HGrid::Save()
 
 
 	// # Form Body
-	tinyxml2::XMLComment* CmntBody = WDocument.NewComment("Part: Body");
+	tinyxml2::XMLComment* CmntBody = WDocument.NewComment("********** Part: Body **********");
 	El_Root->InsertEndChild(CmntBody);
 
 	tinyxml2::XMLElement* El_Body = WDocument.NewElement("BODY");

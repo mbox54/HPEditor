@@ -192,7 +192,7 @@ BYTE Read_config(stHPFileGlobals* var_stGlobals)
 {
 	// > Open File (config)
 	// default name
-	char* file_name = (char*)"res/variables.ini";
+	char* file_name = (char*)"variables.ini";
 
 	// try open
 	FILE* fs = fopen(file_name, "r");
