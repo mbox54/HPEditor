@@ -335,7 +335,7 @@ void Hhexlogic<T>::NodeRowPaste(WORD usIndex)
 
 		// add row
 		// allocate memory: insert element in specific position
-		std::vector<T>::iterator itIndex;
+		typename std::vector<T>::iterator itIndex;
 		itIndex = mv_grid.begin() + usIndex;
 		this->mv_grid.insert(itIndex, T);
 
@@ -362,7 +362,7 @@ void Hhexlogic<T>::NodeColPaste(WORD usRowIndex, WORD usIndex)
 
 		// add col
 		// allocate memory: insert element in specific position in specific row
-		std::vector<T>::iterator itIndex;
+		typename std::vector<T>::iterator itIndex;
 		itIndex = mv_grid.begin() + usIndex;
 		this->mv_grid[usRowIndex].insert(itIndex, T);
 
@@ -388,7 +388,7 @@ void Hhexlogic<T>::NodeRowCut(WORD usIndex)
 
 		// cut row
 		// delete from position, move elements to empty pos
-		std::vector<T>::iterator itIndex;
+		typename std::vector<T>::iterator itIndex;
 		itIndex = mv_grid.begin() + usIndex;
 		this->mv_grid.erase(itIndex);
 
@@ -415,7 +415,7 @@ void Hhexlogic<T>::NodeColCut(WORD usRowIndex, WORD usIndex)
 
 		// cut col
 		// allocate memory: just pop back element in specific row
-		std::vector<T>::iterator itIndex;
+		typename std::vector<T>::iterator itIndex;
 		itIndex = mv_grid.begin() + usIndex;
 		this->mv_grid[usRowIndex].erase(itIndex);
 
@@ -591,7 +591,7 @@ void Hhexlogic<T>::NodeRect_ResizeGrid(POINT gridSize)
 		m_gridSize.y = gridSize.y;
 
 		// resize Rows
-		mv_grid[y].resize(m_gridSize.y);
+		mv_grid.resize(m_gridSize.y);
 	}
 
 	// check Cols details of update
@@ -609,9 +609,9 @@ void Hhexlogic<T>::NodeRect_ResizeGrid(POINT gridSize)
 		m_gridSize.x = gridSize.x;
 
 		// resize Cols
-		for (WORD k = 0; k < m_gridSize.x; k++)
+		for (WORD k = 0; k < m_gridSize.y; k++)
 		{
-			mv_grid[y].resize();
+			mv_grid[k].resize(m_gridSize.x);
 		}
 	}
 

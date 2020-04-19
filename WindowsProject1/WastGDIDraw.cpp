@@ -80,7 +80,7 @@ void WastGDIDraw::SetupGridLogic(void)
 	m_pictureGridSize.x = usHexColCount;
 	m_pictureGridSize.y = usHexRowCount;
 
-	mv_HexPts.NodeRect_PlaceNewGrid(m_pictureGridSize);
+	mv_HexPts.NodeRect_ResizeGrid(m_pictureGridSize);
 
 	// fill coords
 	for (WORD y = 0; y < usHexRowCount; y++)
@@ -202,6 +202,22 @@ void WastGDIDraw::PaintGridBackground(HDC hdc)
 		}
 	}
 	
+}
+
+
+// FORMAT:
+//             X 0 1 2 3 i
+// Y         . . . . . .
+// j       . . . . . .
+// 3     . # # # # .
+// 2   . # # # # .
+// 1 . # # # # .
+// 0 # # # # .
+void WastGDIDraw::PaintGridRect(HDC hdc)
+{
+
+
+
 }
 
 // FORMAT:

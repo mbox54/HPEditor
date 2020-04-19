@@ -91,9 +91,11 @@ private:
 	void DrawPixels();
 
 	// figures composite
+	// NOTE:
+	// HDC resource is system global, it got and returned every Paint time.
 	void PaintGridCenterPoints(HDC hdc);
 	void PaintGridBackground(HDC hdc);
-		
+	void PaintGridRect(HDC hdc);
 
 	// figures primitives	
 	void PaintHex(HDC hdc, POINT ptCoord, WORD usSideA, HPEN hPen);

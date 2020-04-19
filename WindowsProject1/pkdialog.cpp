@@ -329,7 +329,7 @@ BOOL PKDialog::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 		// new
 		if (wParam == IDC_BUTTON_FILE_NEW)
 		{
-			
+			FileNew();
 		}
 
 		// load
