@@ -291,7 +291,11 @@ void PKDialog::Init(HWND hDlg)
 	m_Canvas.Init(IDC_STATIC_CANVAS, hDlg, &m_hCanvas_ProcHandle);
 
 	// *** work object ***
-	// none here
+	// give Grid-logic to Draw-library
+	m_Canvas.m_Draw.SetGridObject(&m_HPGrid);
+
+	// prerare new work
+	FileNew();
 
 }
 

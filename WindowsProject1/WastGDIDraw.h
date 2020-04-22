@@ -15,6 +15,7 @@
 ////////////////////////////////////////////////////////////
 #include "project.h"
 #include "hpcore/hhexlogic.h"
+#include "hpcore/hgrid.h"
 
 
 ////////////////////////////////////////////////////////////
@@ -44,6 +45,12 @@ class WastGDIDraw
 		RGB(200, 200, 200)
 	};
 
+	const struct st_PenStyle mc_stGridGeneral =
+	{
+		PS_SOLID,
+		2,
+		RGB(80, 80, 80)
+	};
 
 public:	
 
@@ -56,6 +63,8 @@ public:
 
 	// *** methods ***
 	void Init(HWND hWnd);
+
+	void SetGridObject(HGrid* pGrid);
 
 	// Paint current view screen
 	void Draw();
@@ -77,8 +86,12 @@ private:
 	WORD m_usFigureHexSideA;
 	POINT m_pictureGridSize;
 
-	// temp logic memstruct
+	// coords of centers for grid of hex
 	Hhexlogic <POINT> mv_HexPts;
+
+	// hex_grid logic object
+	HGrid* m_pGrid;
+
 
 	// *** methods ***
 	void Defaults(void);

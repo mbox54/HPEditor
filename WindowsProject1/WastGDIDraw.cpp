@@ -107,6 +107,12 @@ void WastGDIDraw::Init(HWND hWnd)
 }
 
 
+void WastGDIDraw::SetGridObject(HGrid* pGrid)
+{
+	m_pGrid = pGrid;
+}
+
+
 void WastGDIDraw::DrawPixels()
 {
 	PAINTSTRUCT ps;
@@ -168,6 +174,9 @@ void WastGDIDraw::Draw()
 	// paint background grid
 	PaintGridBackground(hdc);
 
+	// paint existed hex grid
+	PaintGridRect(hdc);
+
 	// # release resources
 	EndPaint(m_hWnd, &ps);
 }
@@ -215,8 +224,18 @@ void WastGDIDraw::PaintGridBackground(HDC hdc)
 // 0 # # # # .
 void WastGDIDraw::PaintGridRect(HDC hdc)
 {
+	// define specific style
+	HPEN hPenDraw = CreatePen(mc_stGridGeneral.iStyle, mc_stGridGeneral.cWidth, mc_stGridGeneral.color);
 
-
+	// draw hexes
+	for (WORD y = 0; y < m_pGrid->m_gridSize.y; y++)
+	{
+		for (WORD x = 0; x < m_pGrid->m_gridSize.x; x++)
+		{
+			// draw
+			PaintHex(hdc, mv_HexPts.mv_grid[y][(x + 1) / 2], m_usFigureHexSideA, hPenDraw);
+		}
+	}
 
 }
 

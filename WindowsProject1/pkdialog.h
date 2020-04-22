@@ -87,7 +87,10 @@ public:
 	void Init(int nResId, HWND hWndParent, WNDPROC* hProcHandle);
 
 
-	// > properties
+	// > properties	
+
+	WastGDIDraw m_Draw;
+
 
 	// > methods
 	//
@@ -103,7 +106,7 @@ public:
 private:
 
 	// properties
-	WastGDIDraw m_Draw;
+
 
 	// methods
 	void InitCanvas();
