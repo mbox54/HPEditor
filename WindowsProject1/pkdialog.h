@@ -173,5 +173,7 @@ private:
 	void FileLoad(void);
 	void FileSave(void);
 	
-	
+	// service
+	void UpdateControls_Size(void);
+
 };

@@ -80,6 +80,9 @@ public:
 	void NodeRect_UpdateGrid();
 	void NodeRect_ResizeGrid(POINT gridSize);
 
+	WORD NodeRect_GetRowCount(void);
+	WORD NodeRect_GetColCount(void);
+
 	// node / file
 	void LoadNode(POINT gridPos);
 
@@ -615,6 +618,20 @@ void Hhexlogic<T>::NodeRect_ResizeGrid(POINT gridSize)
 		}
 	}
 
+}
+
+
+template<class T>
+inline WORD Hhexlogic<T>::NodeRect_GetRowCount(void)
+{
+	return m_gridSize.y;
+}
+
+
+template<class T>
+inline WORD Hhexlogic<T>::NodeRect_GetColCount(void)
+{
+	return m_gridSize.x;
 }
 
 

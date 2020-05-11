@@ -414,6 +414,21 @@ void PKDialog::FileSave(void)
 
 }
 
+// ** support **
+void PKDialog::UpdateControls_Size(void)
+{
+	char strBuf[32];
+
+	// row_count
+	sprintf(strBuf, "%d", m_HPGrid.NodeRect_GetRowCount);
+
+	HWND m_hRows = GetDlgItem(m_hWndParent, IDC_STATIC_ROW_COUNT);
+	SetWindowText(m_hRows, (LPCWSTR)strBuf);
+
+	// col_count
+
+}
+
 
 // create dialog
 // NOTE:

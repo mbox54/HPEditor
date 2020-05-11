@@ -9,9 +9,12 @@
 // - [09.02.20] save Grid to file.xml
 // + [23.02.20] [01.03.20] place Wast Grid logic here
 // - [01.03.20] place CMD "new" with empty wast file in dialog
-// - [01.03.20] prepare function for CMD "new" with empty HPGrid and support
+// + [01.03.20] [22.04.20] prepare function for CMD "new" with empty HPGrid and support
 // + [01.03.20] [09.03.20] complete nodes base OPs in "hhexlogic"
 // + [09.03.20] [09.03.20] complete nodes extended OPs in "hhexlogic"
+// - [22.04.20] link main dialog controls to rect_grid size
+// - [22.04.20] perform actions for Buttons addRow, addCol, delRow, delCol
+// - [22.04.20] perform OnMouse event to shift active hex_cell hover cursor
 
 
 ////////////////////////////////////////////////////////////
